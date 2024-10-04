@@ -1,0 +1,202 @@
+/* BlogDetails Page Container */
+.blog-details-container {
+  padding: 20px;
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  /* max-width: 1000px; Set max width for content */
+  width: 100%;
+  margin: 0 auto; /* Center the content */
+}
+
+/* Blog Header (Back Button and Share Icons) */
+.blog-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.blog-details-back,
+.blog-details-share {
+  display: flex;
+  align-items: center;
+}
+
+.blog-details-back {
+  font-size: 18px;
+  color: #012367;
+  text-decoration: none;
+}
+
+.blog-details-back-icon {
+  margin-right: 8px;
+  text-decoration: none;
+}
+
+.blog-details-back:hover {
+  color: #09d3f4;
+  text-decoration: none;
+}
+
+/* Share Icons */
+.blog-details-share-icon {
+  font-size: 20px;
+  margin-left: 15px;
+  cursor: pointer;
+  color: #012367;
+}
+
+.blog-details-share-icon:hover {
+  color: #09d3f4;
+}
+
+/* Blog Content */
+.blog-details-content {
+  padding: 20px;
+  /* background-color: #fff; */
+  border-radius: 10px;
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+  width: 62%;
+  margin: auto;
+}
+
+.blog-details-banner {
+  width: 100%;
+  height: auto;
+  max-width: 800px; /* Set a max width for the image */
+  height: 100%;
+  max-height: 500px; /* Set a max width for the image */
+  object-fit: cover;
+  background-size: cover;
+  background-position: top center;
+  display: block;
+  margin: 0 auto 20px auto; /* Center the image and add margin */
+  border-radius: 8px;
+}
+
+.blog-details-title {
+  font-size: 28px;
+  margin-bottom: 10px;
+  text-align: center; /* Center the title */
+  color: #012367;
+}
+
+.blog-details-meta {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+  text-align: center; /* Center the metadata */
+}
+
+.blog-details-text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  text-align: justify; /* Makes the content easier to read */
+  max-width: 800px;
+  margin: 0 auto;
+  margin-bottom: 5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .blog-details-container {
+    padding: 10px;
+  }
+
+  .blog-details-title {
+    font-size: 24px;
+  }
+
+  .blog-details-text {
+    font-size: 15px;
+  }
+
+  .blog-details-banner {
+    max-width: 100%; /* Allow image to adjust fully for mobile */
+  }
+}
+.blog-details-share .fa-whatsapp {
+  color: #25d366; /* WhatsApp green color */
+  transition: color 0.3s ease; /* Smooth transition */
+}
+
+.blog-details-share .fa-whatsapp:hover {
+  color: #128c7e; /* Darker shade of WhatsApp green on hover */
+}
+
+.faq-section {
+  /* margin-top: 4rem; */
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-section h2 {
+  font-size: 22px;
+  color: #012367;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.faq-list {
+  list-style: none;
+  padding: 0;
+}
+
+.faq-item {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.faq-item.open {
+  background: #eef4ff; /* Light blue background when open */
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  color: #012367;
+}
+
+.faq-answer {
+  margin-top: 10px;
+  color: #333;
+  font-size: 14px;
+}
+
+.faq-toggle-icon {
+  font-size: 20px;
+  color: #012367;
+  transition: transform 0.3s ease;
+}
+
+.faq-toggle-icon.open {
+  transform: rotate(180deg); /* Rotate the icon when open */
+}
+
+/* Smooth transition for FAQ answers */
+.faq-answer p {
+  margin: 0;
+  padding: 0;
+}
+
+.faq-answer {
+  overflow: hidden;
+  transition: max-height 0.4s ease-out;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 100%;
+}
+
+.faq-item .faq-answer {
+  max-height: 0;
+}
