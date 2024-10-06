@@ -75,7 +75,7 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   position: relative;
-  max-width: 350px;
+  max-width: 340px;
   margin: 0 auto;
 }
 
@@ -88,6 +88,7 @@
   width: 100%;
   height: 200px;
   object-fit: cover;
+  min-width: 350px;
 }
 
 .blog-list-card-content {
@@ -324,4 +325,99 @@
 
 .scroll-arrow:hover {
   color: #09d3f4;
+} */
+
+.searchWithButtonStyle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.search-bar-wrapper {
+  display: flex;
+  align-items: center;
+  /* background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 5px 10px;
+  max-width: 250px; */
+  position: relative;
+}
+
+.blog-search-input {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 9px 12px;
+  position: relative;
+  width: 290px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  color: #666;
+  font-size: 16px;
+}
+
+/* 
+.view-all-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 5px 10px;
+  max-width: 250px;
+  flex-grow: 1;
+  position: relative;
+}
+
+.blog-search-input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  padding: 8px;
+  width: 100%;
+  border-radius: 20px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  color: #666;
+  font-size: 16px;
+}
+
+.modern-view-all-link {
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.modern-view-all-link i {
+  margin-right: 5px;
+}
+
+.modern-view-all-link:hover {
+  background-color: #007bb5; 
 } */

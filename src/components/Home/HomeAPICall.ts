@@ -22,6 +22,8 @@ export interface DashboardInfo {
   topStocks: TopStock[];
   latestUsers: LatestUser[];
   totalStocks: number;
+  totalBlogs: any;
+  totalCategories: any;
   totalCommodities: number;
   totalUsers: number;
   totalInvested: number;
@@ -48,18 +50,19 @@ interface DashboardResponse {
 }
 
 // Define the API URL
-const API_URL = "https://vertex-fx.onrender.com/admin/dashboard-info";
+const API_URL = "http://localhost:5001/admin/nautika/dashboard";
 
 // Function to fetch dashboard info
-export const fetchDashboardInfo = async (): Promise<DashboardInfo | null> => {
+export const fetchDashboardInfo = async () => {
   try {
-    const response = await axios.get<DashboardResponse>(API_URL);
-    if (response.data.status) {
-      return response.data.data;
-    } else {
-      console.error("Failed to fetch dashboard info:", response.data.message);
-      return null;
-    }
+    const response = await axios.get(API_URL);
+
+    return response.data;
+    // if (response.data.status) {
+    // } else {
+    //   console.error("Failed to fetch dashboard info:", response.data.message);
+    //   return null;
+    // }
   } catch (error) {
     console.error("Error fetching dashboard info:", error);
     return null;

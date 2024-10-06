@@ -73,6 +73,7 @@
   height: 180px;
   object-fit: cover;
   border-bottom: 1px solid #ddd;
+  min-width: "350px";
 }
 
 /* Blog count label */
@@ -107,4 +108,10 @@
   color: #666;
   margin: 0;
   line-height: 1.5;
+}
+
+.blog-categories-headerWithShare {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

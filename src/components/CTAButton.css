@@ -1,0 +1,54 @@
+.cta-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #09d3f4; /* Brand color */
+  color: white;
+  padding: 10px 15px; /* Smaller padding */
+  border-radius: 30px; /* Smaller rounded corners */
+  font-size: 14px; /* Smaller font size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  z-index: 1000; /* Ensure the button stays on top of other elements */
+}
+
+.cta-button i {
+  margin-right: 8px; /* Adjust icon spacing */
+  font-size: 18px; /* Smaller icon size */
+}
+
+.cta-button:hover {
+  background-color: #007bb5; /* Darker brand color on hover */
+  transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cta-button {
+    padding: 8px 12px; /* Smaller padding for mobile */
+    font-size: 12px; /* Smaller font size for mobile */
+    right: 15px;
+    bottom: 15px;
+  }
+
+  .cta-button i {
+    font-size: 16px; /* Adjust icon size on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .cta-button {
+    padding: 6px 10px; /* Even smaller padding for very small screens */
+    font-size: 11px; /* Even smaller font size */
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .cta-button i {
+    font-size: 14px; /* Adjust icon size further for very small screens */
+  }
+}

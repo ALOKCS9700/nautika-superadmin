@@ -10,14 +10,10 @@ import {
 export const loginApiCall = (email: string, password: string) => {
   return async (dispatch: Dispatch) => {
     try {
-      const response = await axios.post(
-        "https://vertex-fx.onrender.com/admin/login",
-        {
-          email,
-          password,
-        }
-      );
-
+      const response = await axios.post("http://localhost:5001/admin/login", {
+        email,
+        password,
+      });
       if (response.data.status) {
         // Dispatch success action with the data
         dispatch(
@@ -58,7 +54,17 @@ export const loginApiCall = (email: string, password: string) => {
       }
     } catch (error) {
       // Handle error
-      dispatch(addNotification("Login Failure", `Login Failure`));
+      // dispatch(addNotification("Login Failure", `Login Failure`));
+      // localStorage.setItem("authToken", "tokenhai");
+      // dispatch({
+      //   type: LOGIN_SUCCESS,
+      //   payload: {
+      //     token: "tokenhai",
+      //     fullName: "Atul Mani",
+      //     email: "superadmin@gmail.com",
+      //     data: [], // Include data from response
+      //   },
+      // });
       dispatch({
         type: LOGIN_FAILURE,
         payload: {

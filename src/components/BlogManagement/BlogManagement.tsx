@@ -1,62 +1,85 @@
-import React, { Fragment, Dispatch, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
+import axios from "axios";
 import TopCard from "../../common/components/TopCard";
 import CategoryManagement from "./CategoryManagement";
 import Popup from "reactjs-popup";
 import "./BlogManagement.css";
 import BlogList from "./BlogManagementList";
 import BlogForm from "./BlogManagementForm";
-import { getFromLocalStorage, saveToLocalStorage } from "../../common/components/CommonFunction";
+
+const api = axios.create({
+  baseURL: "http://localhost:5001/admin/nautika", // Base API URL
+});
 
 const BlogManagement: React.FC = () => {
-  const [blogs, setBlogs] = useState<any[]>(getFromLocalStorage('blogs'));
-  const [categories, setCategories] = useState<any[]>(getFromLocalStorage('categories'));
+  const [blogs, setBlogs] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [selectedBlog, setSelectedBlog] = useState<any | null>(null);
   const [showCategoryPage, setShowCategoryPage] = useState(false);
   const [popup, setPopup] = useState(false);
 
-  const totalBlogs = blogs.length;
-  const totalCategories = categories.length;
-
   useEffect(() => {
-    // Load from localStorage when component mounts
-    setBlogs(getFromLocalStorage('blogs'));
-    setCategories(getFromLocalStorage('categories'));
+    // Fetch blogs and categories from API when component mounts
+    fetchBlogs();
+    fetchCategories();
   }, []);
+
+  const fetchBlogs = async () => {
+    try {
+      const response = await api.get("/blogs");
+      setBlogs(response.data);
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await api.get("/categories");
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  const handleBlogSave = async (newBlog: any) => {
+    try {
+      if (selectedBlog && selectedBlog._id) {
+        // Update existing blog
+        await api.put(`/blogs/${selectedBlog._id}`, newBlog);
+      } else {
+        // Create new blog
+        await api.post("/blogs", newBlog);
+      }
+      fetchBlogs(); // Refresh the list after save
+      setPopup(false);
+    } catch (error) {
+      console.error("Error saving blog:", error);
+    }
+  };
+
+  const handleBlogDelete = async (blogId: string) => {
+    try {
+      await api.delete(`/blogs/${blogId}`);
+      fetchBlogs(); // Refresh the list after delete
+    } catch (error) {
+      console.error("Error deleting blog:", error);
+    }
+  };
 
   const handleBlogSelect = (blog: any) => {
     setSelectedBlog(blog);
     setPopup(true);
   };
 
-  const handleBlogSave = (newBlog: any) => {
-    let updatedBlogs;
-    if (selectedBlog && selectedBlog.id) {
-      // Edit existing blog
-      updatedBlogs = blogs.map(blog => blog.id === selectedBlog.id ? newBlog : blog);
-    } else {
-      // Add new blog
-      newBlog.id = Date.now();
-      updatedBlogs = [...blogs, newBlog];
-    }
-    setBlogs(updatedBlogs);
-    saveToLocalStorage('blogs', updatedBlogs);
-    setPopup(false);
-  };
-
-  const handleBlogDelete = (blogId: string) => {
-    const updatedBlogs = blogs.filter(blog => blog.id !== blogId);
-    setBlogs(updatedBlogs);
-    saveToLocalStorage('blogs', updatedBlogs);
-  };
-
   const handleCategoryPageToggle = () => setShowCategoryPage(!showCategoryPage);
 
   return (
     <Fragment>
-      <h1 className="h3 mb-2 text-gray-800"> {showCategoryPage ? "Category Management" : "Blogs Management"}</h1>
+      <h1 className="h3 mb-2 text-gray-800">{showCategoryPage ? "Category Management" : "Blogs Management"}</h1>
       <div className="row">
-        <TopCard title="Total Blogs" text={`${totalBlogs}`} icon="book" class="primary" />
-        <TopCard title="Total Categories" text={`${totalCategories}`} icon="list" class="info" />
+        <TopCard title="Total Blogs" text={`${blogs.length}`} icon="book" class="primary" />
+        <TopCard title="Total Categories" text={`${categories.length}`} icon="list" class="info" />
       </div>
 
       {showCategoryPage ? (
@@ -74,8 +97,8 @@ const BlogManagement: React.FC = () => {
                 <div className="card-header py-3 headingWithButtonStyle">
                   <h6 className="m-0 font-weight-bold text-green">Blog List</h6>
                   <button className="btn btn-success" onClick={() => {
-                    setSelectedBlog(null)
-                    setPopup(true)
+                    setSelectedBlog(null);
+                    setPopup(true);
                   }}>
                     Add New Blog
                   </button>

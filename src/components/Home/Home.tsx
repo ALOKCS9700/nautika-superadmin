@@ -12,7 +12,7 @@ const Home: React.FC = () => {
   const products: IProductState = useSelector((state: IStateType) => state.products);
   const orders: IOrder[] = useSelector((state: IStateType) => state.orders.orders);
 
-  const [dashboardData, setDashboardData] = useState<DashboardInfo | null>(null);
+  const [dashboardData, setDashboardData] = useState([] as any);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [blogs, setBlogs] = useState<any[]>(getFromLocalStorage('blogs'));
@@ -44,7 +44,7 @@ const Home: React.FC = () => {
       setLoading(false);
     };
 
-    // loadDashboardData();
+    loadDashboardData();
   }, [dispatch]);
 
   // Calculate totals
@@ -69,8 +69,12 @@ const Home: React.FC = () => {
       <p className="mb-4">Summary and overview of our admin stuff here</p>
 
       <div className="row">
-        <TopCard title="Total Blogs" text={`${totalBlogs}`} icon="book" class="primary" />
-        <TopCard title="Total Categories" text={`${totalCategories}`} icon="list" class="info" />
+        {/* {dashboardData.totalBlogs && ( */}
+          <TopCard title="Total Blogs" text={`${dashboardData.totalBlogs}`} icon="book" class="primary" />
+        {/* )} */}
+        {/* {dashboardData.totalCategories && ( */}
+          <TopCard title="Total Categories" text={`${dashboardData.totalCategories}`} icon="list" class="info" />
+        {/* )} */}
         {/* <TopCard title="TOTAL Blogs" text={dashboardData.totalStocks.toString()} icon="box" class="primary" /> */}
         {/* <TopCard title="TOTAL COMMODITIES" text={dashboardData.totalCommodities.toString()} icon="warehouse" class="danger" />
         <TopCard title="TOTAL INVESTED" text={`₹${dashboardData.totalInvested.toFixed(2)}`} icon="dollar-sign" class="success" />

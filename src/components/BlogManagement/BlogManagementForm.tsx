@@ -1,24 +1,28 @@
 import React, { useState, useEffect } from "react";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import axios from 'axios';
 
 const BlogForm: React.FC<{ blog: any | null, onSave: (blog: any) => void, onClose: () => void }> = ({ blog, onSave, onClose }) => {
   const [title, setTitle] = useState(blog ? blog.title : "");
   const [content, setContent] = useState(blog ? blog.content : "");
-  const [faq, setFaq] = useState(blog ? blog.faq : []);
-  const [bannerImage, setBannerImage] = useState<string | null>(blog ? blog.bannerImage : null);
-  const [category, setCategory] = useState(blog ? blog.category : "");
+  const [faq, setFaq] = useState<Array<{ question: string, answer: string }>>(blog && blog.faqs ? blog.faqs : []); // Ensure faq is an array
+  const [imageFile, setImageFile] = useState<File | null>(null); // For the image file upload
+  const [imageUrl, setImageUrl] = useState<string | null>(blog ? blog.image : null); // For the image URL returned by API
+  const [categoryId, setCategoryId] = useState(blog ? blog.categoryId : "");
+  const [categoryName, setCategoryName] = useState(blog ? blog.categoryName : "");
   const [status, setStatus] = useState(blog ? blog.status === "Published" : false);
   const [readTime, setReadTime] = useState<number | null>(null); // Automatically calculated read time
   const [createdAt] = useState(blog ? blog.createdAt : new Date().toISOString());
-  const [categories, setCategories] = useState<any[]>([]); // Categories from localStorage
+  const [categories, setCategories] = useState<any[]>([]); // Categories from API
 
-  // Load categories from localStorage
   useEffect(() => {
-    const savedCategories = localStorage.getItem('categories');
-    if (savedCategories) {
-      setCategories(JSON.parse(savedCategories));
+    // Fetch categories from API
+    async function fetchCategories() {
+      const response = await axios.get("http://localhost:5001/admin/nautika/categories");
+      setCategories(response.data);
     }
+    fetchCategories();
   }, []);
 
   useEffect(() => {
@@ -33,40 +37,62 @@ const BlogForm: React.FC<{ blog: any | null, onSave: (blog: any) => void, onClos
     setReadTime(estimatedTime);
   };
 
-  const handleSave = () => {
+  // Function to upload image and return the URL
+  const uploadImage = async (file: File) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await axios.post("http://localhost:5001/admin/intro/upload-image", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      // Return the uploaded image URL
+      return `http://localhost:5001${response.data.fileUrl}`;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      return null;
+    }
+  };
+
+  const handleSave = async () => {
+    let finalImageUrl = imageUrl;
+
+    // If a new image is selected, upload it
+    if (imageFile) {
+      const uploadedImageUrl = await uploadImage(imageFile);
+      if (uploadedImageUrl) {
+        finalImageUrl = uploadedImageUrl; // Update with the uploaded image URL
+      }
+    }
+
     const newBlog = {
-      id: blog ? blog.id : Date.now(),  // Ensure the blog has an id for both new and updated blogs
+      _id: blog ? blog._id : undefined,  // Ensure the blog has an id for both new and updated blogs
       title,
       content,
-      faq,
-      bannerImage,
-      category,
+      faqs: faq,
+      image: finalImageUrl,  // Use the uploaded image URL
+      categoryId,
+      categoryName,
       status: status ? "Published" : "Draft",
       readTime,
       createdAt,
     };
 
-    // Convert image to base64 to store in localStorage
-    if (bannerImage && typeof bannerImage === 'object') {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        newBlog.bannerImage = reader.result as string;
-        onSave(newBlog);
-      };
-      reader.readAsDataURL(bannerImage);
-    } else {
-      onSave(newBlog);
-    }
+    onSave(newBlog);
   };
 
   const handleAddFaq = () => {
     setFaq([...faq, { question: "", answer: "" }]);
   };
 
-  const handleBannerImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const file: any = event.target.files[0];
-      setBannerImage(file);
+      setImageFile(file); // Set the image file to upload
+      setImageUrl(URL.createObjectURL(file)); // Set a temporary URL for preview
     }
   };
 
@@ -95,13 +121,17 @@ const BlogForm: React.FC<{ blog: any | null, onSave: (blog: any) => void, onClos
         <label>Estimated Read Time: {readTime ? `${readTime} min` : "Calculating..."}</label>
       </div>
 
-      {/* Category selection from localStorage */}
+      {/* Category selection from API */}
       <div className="form-group">
         <label>Category</label>
-        <select className="form-control" value={category} onChange={(e) => setCategory(e.target.value)}>
+        <select className="form-control" value={categoryId} onChange={(e) => {
+          const selectedCategory = categories.find((cat) => cat._id === e.target.value);
+          setCategoryId(selectedCategory._id);
+          setCategoryName(selectedCategory.name);
+        }}>
           <option value="" disabled>Select category</option>
           {categories.map((cat, index) => (
-            <option key={index} value={cat.name}>{cat.name}</option>
+            <option key={index} value={cat._id}>{cat.name}</option>
           ))}
         </select>
       </div>
@@ -126,12 +156,17 @@ const BlogForm: React.FC<{ blog: any | null, onSave: (blog: any) => void, onClos
           type="file"
           className="form-control"
           accept="image/*"
-          onChange={handleBannerImageChange}
+          onChange={handleImageChange}
         />
+        {/* {imageUrl && (
+          <div className="image-preview">
+            <img src={imageUrl} alt="Banner Preview" style={{ maxWidth: '100%', marginTop: '10px' }} />
+          </div>
+        )} */}
       </div>
 
       <h4>FAQ Section</h4>
-      {faq.map((faqItem: any, index: number) => (
+      {faq.length > 0 ? faq.map((faqItem: any, index: number) => (
         <div key={index} className="form-group">
           <input
             type="text"
@@ -154,7 +189,9 @@ const BlogForm: React.FC<{ blog: any | null, onSave: (blog: any) => void, onClos
             className="ReactQuillStyle"
           />
         </div>
-      ))}
+      )) : (
+        <p>No FAQs added yet</p>
+      )}
       <button className="btn btn-secondary buttonSenStyle" onClick={handleAddFaq}>Add FAQ</button>
 
       <div className="form-group mt-4 addBlogStyle">

@@ -16,8 +16,8 @@ const Login: React.FC = () => {
   console.log("accountaccountaccountaccount", account)
 
   const [formState, setFormState] = useState({
-    email: { error: "", value: "admin@yopmail.com" },
-    password: { error: "", value: "Asdf123" }
+    email: { error: "", value: "" },
+    password: { error: "", value: "" }
   });
 
   function hasFormValueChanged(model: OnChangeModel): void {

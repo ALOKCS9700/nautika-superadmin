@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { getFromLocalStorage, saveToLocalStorage } from "../../common/components/CommonFunction";
 import { useDispatch } from "react-redux";
+
+// Set up axios with baseURL
+const api = axios.create({
+    baseURL: "http://localhost:5001/admin/nautika",
+});
 
 // Utility function to compress image
 const compressImage = (file: File, quality = 0.7): Promise<string | null> => {
@@ -39,7 +45,7 @@ const compressImage = (file: File, quality = 0.7): Promise<string | null> => {
 
 const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     const dispatch = useDispatch();
-    const [categories, setCategories] = useState<any[]>(getFromLocalStorage('categories') || []);
+    const [categories, setCategories] = useState<any[]>([]);
     const [newCategory, setNewCategory] = useState<{ name: string, description: string, image: string | null }>({
         name: "",
         description: "",
@@ -48,41 +54,56 @@ const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     const [editCategory, setEditCategory] = useState<any | null>(null);
 
     useEffect(() => {
-        const savedCategories = getFromLocalStorage('categories');
-        if (savedCategories) {
-            setCategories(savedCategories);
-        }
+        fetchCategories();
     }, [dispatch]);
 
-    const handleAddEditCategory = () => {
-        const updatedCategories = [...categories];
-        const newCategoryCopy = { ...newCategory };
-
-        if (editCategory) {
-            // Edit existing category
-            const index = updatedCategories.findIndex(cat => cat.id === editCategory.id);
-            if (index !== -1) {
-                updatedCategories[index] = { ...editCategory, ...newCategoryCopy };
-            }
-        } else {
-            // Add new category
-            const newCategoryWithId = { ...newCategoryCopy, id: Date.now() };
-            updatedCategories.push(newCategoryWithId);
+    // Fetch all categories
+    const fetchCategories = async () => {
+        try {
+            const response = await api.get("/categories");
+            setCategories(response.data);
+        } catch (error) {
+            console.error("Error fetching categories:", error);
         }
-
-        // Save categories to localStorage
-        saveToLocalStorage('categories', updatedCategories);
-        setCategories(updatedCategories);
-        setNewCategory({ name: "", description: "", image: null });
-        setEditCategory(null);
     };
 
-    const handleDeleteCategory = (categoryId: string) => {
-        const updatedCategories = categories.filter(cat => cat.id !== categoryId);
-        setCategories(updatedCategories);
-        saveToLocalStorage('categories', updatedCategories);
+    // Handle add/edit category
+    const handleAddEditCategory = async () => {
+        try {
+            if (editCategory) {
+                // Update existing category
+                await api.put(`/categories/${editCategory._id}`, {
+                    categoryName: newCategory.name,
+                    categoryDescription: newCategory.description,
+                    categoryImage: newCategory.image,
+                });
+            } else {
+                // Create new category
+                await api.post("/categories", {
+                    name: newCategory.name,
+                    description: newCategory.description,
+                    image: newCategory.image,
+                });
+            }
+            fetchCategories(); // Refresh the list
+            setNewCategory({ name: "", description: "", image: null });
+            setEditCategory(null);
+        } catch (error) {
+            console.error("Error adding/editing category:", error);
+        }
     };
 
+    // Handle delete category
+    const handleDeleteCategory = async (categoryId: string) => {
+        try {
+            await api.delete(`/categories/${categoryId}`);
+            fetchCategories(); // Refresh the list
+        } catch (error) {
+            console.error("Error deleting category:", error);
+        }
+    };
+
+    // Handle edit category
     const handleEditCategory = (category: any) => {
         if (category) {
             setEditCategory(category);
@@ -90,21 +111,34 @@ const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         }
     };
 
+    // Handle image upload
     const handleCategoryImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target && event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
             try {
-                const compressedImage = await compressImage(file); // Compress image before saving
-                setNewCategory({ ...newCategory, image: compressedImage });
+                // Compress image before uploading
+                const compressedImage = await compressImage(file);
+
+                // Upload compressed image
+                const formData = new FormData();
+                formData.append("file", file); // Append the original file
+                const apiURL ="http://localhost:5001/admin/intro/upload-image"
+                const response = await api.post(apiURL, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+
+                // Set the uploaded image URL
+                setNewCategory({ ...newCategory, image: `http://localhost:5001${response.data.fileUrl}` });
             } catch (error) {
-                console.error("Error compressing image", error);
+                console.error("Error uploading image", error);
             }
         }
     };
 
     return (
         <div>
-            {/* <h3>Category Management</h3> */}
             <div className="ManageCategoriesBtn">
                 <button className="btn btn-secondary buttonSenStyle" onClick={onBack}>Back to Blog List</button>
             </div>
@@ -161,7 +195,7 @@ const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 </thead>
                 <tbody>
                     {categories.map((category, index) => (
-                        <tr key={category.id}>
+                        <tr key={category._id}>
                             <td>{index + 1}</td>
                             <td>
                                 {category.image ? <img src={category.image} alt={category.name} style={{ width: '50px', height: '50px' }} /> : "No Image"}
@@ -170,7 +204,7 @@ const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                             <td>{category.description}</td>
                             <td className="listItemStyle">
                                 <button className="btn btn-warning mr-2" onClick={() => handleEditCategory(category)}>Edit</button>
-                                <button className="btn btn-danger" onClick={() => handleDeleteCategory(category.id)}>Delete</button>
+                                <button className="btn btn-danger" onClick={() => handleDeleteCategory(category._id)}>Delete</button>
                             </td>
                         </tr>
                     ))}

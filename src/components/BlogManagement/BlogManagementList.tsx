@@ -29,24 +29,24 @@ const BlogList: React.FC<{
         </thead>
         <tbody>
           {blogs.map((blog, index) => (
-            <tr key={blog.id}>
+            <tr key={blog._id}>
               <td>{index + 1}</td>
               <td>
-                {blog.bannerImage ? (
-                  <img src={blog.bannerImage} alt={blog.title} style={{ width: '50px', height: '50px' }} />
+                {blog.image ? (
+                  <img src={blog.image} alt={blog.title} style={{ width: '50px', height: '50px' }} />
                 ) : (
                   "No Image"
                 )}
               </td>
               <td>{blog.title}</td>
-              <td>{blog.category || "Uncategorized"}</td>
+              <td>{blog.categoryName || "Uncategorized"}</td>
               <td>{blog.readTime ? `${blog.readTime} min` : "N/A"}</td>
               <td>{blog.status || "Draft"}</td>
               <td>{new Date(blog.createdAt).toLocaleDateString()}</td>
               <td className="listItemStyle">
                 <button className="btn btn-warning" onClick={() => onEdit(blog)}>Edit</button>
-                <button className="btn btn-danger" onClick={() => onDelete(blog.id)}>Delete</button>
-                <button className="btn btn-info" onClick={() => handleView(blog.id)}>View Blog</button>
+                <button className="btn btn-danger" onClick={() => onDelete(blog._id)}>Delete</button>
+                <button className="btn btn-info" onClick={() => handleView(blog._id)}>View Blog</button>
               </td>
             </tr>
           ))}
