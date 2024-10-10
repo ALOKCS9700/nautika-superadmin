@@ -8,7 +8,7 @@ import BlogList from "./BlogManagementList";
 import BlogForm from "./BlogManagementForm";
 
 const api = axios.create({
-  baseURL: "http://localhost:5001/admin/nautika", // Base API URL
+  baseURL: "https://oglitz-backend-node.onrender.com/admin/nautika", // Base API URL
 });
 
 const BlogManagement: React.FC = () => {

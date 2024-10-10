@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 
 // Set up axios with baseURL
 const api = axios.create({
-    baseURL: "http://localhost:5001/admin/nautika",
+    baseURL: "https://oglitz-backend-node.onrender.com/admin/nautika",
 });
 
 // Utility function to compress image
@@ -122,7 +122,7 @@ const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 // Upload compressed image
                 const formData = new FormData();
                 formData.append("file", file); // Append the original file
-                const apiURL ="http://localhost:5001/admin/intro/upload-image"
+                const apiURL ="https://oglitz-backend-node.onrender.com/admin/intro/upload-image"
                 const response = await api.post(apiURL, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
@@ -130,7 +130,7 @@ const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 });
 
                 // Set the uploaded image URL
-                setNewCategory({ ...newCategory, image: `http://localhost:5001${response.data.fileUrl}` });
+                setNewCategory({ ...newCategory, image: `https://oglitz-backend-node.onrender.com${response.data.fileUrl}` });
             } catch (error) {
                 console.error("Error uploading image", error);
             }

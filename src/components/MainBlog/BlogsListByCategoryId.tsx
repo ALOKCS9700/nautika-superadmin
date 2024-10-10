@@ -14,7 +14,7 @@ const BlogsListByCategoryId = () => {
   useEffect(() => {
     const fetchBlogsByCategory = async () => {
       try {
-        const response = await axios.get(`http://localhost:5001/api/nautika/blogs/category/${id}`);
+        const response = await axios.get(`https://oglitz-backend-node.onrender.com/api/nautika/blogs/category/${id}`);
         const blogsWithFormattedDate = response.data.map((blog: any) => ({
           ...blog,
           formattedDate: formatDate(blog.createdAt),

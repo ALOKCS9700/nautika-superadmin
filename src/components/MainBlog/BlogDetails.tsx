@@ -30,7 +30,7 @@ const BlogDetails = () => {
     const fetchBlogDetails = async () => {
       try {
         // Fetch blog details from API using the provided id
-        const response = await fetch(`http://localhost:5001/api/nautika/blogs/${id}`);
+        const response = await fetch(`https://oglitz-backend-node.onrender.com/api/nautika/blogs/${id}`);
         const data = await response.json();
         const formattedDate = formatDate(data.createdAt); // Format the created date
 
@@ -41,7 +41,7 @@ const BlogDetails = () => {
         });
 
         // Fetch related blogs by categoryId, excluding the current blog
-        const relatedResponse = await fetch(`http://localhost:5001/api/nautika/blogs/category/${data.categoryId}`);
+        const relatedResponse = await fetch(`https://oglitz-backend-node.onrender.com/api/nautika/blogs/category/${data.categoryId}`);
         const relatedData = await relatedResponse.json();
 
         const filteredRelatedBlogs = relatedData.filter((b: any) => b._id !== data._id); // Exclude current blog by ID

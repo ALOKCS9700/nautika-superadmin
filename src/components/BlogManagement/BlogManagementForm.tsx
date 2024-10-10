@@ -19,7 +19,7 @@ const BlogForm: React.FC<{ blog: any | null, onSave: (blog: any) => void, onClos
   useEffect(() => {
     // Fetch categories from API
     async function fetchCategories() {
-      const response = await axios.get("http://localhost:5001/admin/nautika/categories");
+      const response = await axios.get("https://oglitz-backend-node.onrender.com/admin/nautika/categories");
       setCategories(response.data);
     }
     fetchCategories();
@@ -43,14 +43,14 @@ const BlogForm: React.FC<{ blog: any | null, onSave: (blog: any) => void, onClos
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await axios.post("http://localhost:5001/admin/intro/upload-image", formData, {
+      const response = await axios.post("https://oglitz-backend-node.onrender.com/admin/intro/upload-image", formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
       // Return the uploaded image URL
-      return `http://localhost:5001${response.data.fileUrl}`;
+      return `https://oglitz-backend-node.onrender.com${response.data.fileUrl}`;
     } catch (error) {
       console.error('Error uploading image:', error);
       return null;

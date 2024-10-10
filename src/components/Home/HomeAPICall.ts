@@ -50,7 +50,7 @@ interface DashboardResponse {
 }
 
 // Define the API URL
-const API_URL = "http://localhost:5001/admin/nautika/dashboard";
+const API_URL = "https://oglitz-backend-node.onrender.com/admin/nautika/dashboard";
 
 // Function to fetch dashboard info
 export const fetchDashboardInfo = async () => {
