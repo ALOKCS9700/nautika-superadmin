@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './BlogsList.css'; // Import the custom CSS file
 import CTAButton from '../CTAButton';
 import NotFoundSection from '../NotFoundSection';
+import Footer from '../Footer';
 
 const BlogsList = () => {
   const [blogs, setBlogs] = useState([] as any);
@@ -129,7 +130,7 @@ const BlogsList = () => {
   };
 
   return (
-    <>
+    <div className="d-flex">
       <div className="blog-list-container">
         <div className="blog-list-header">
           <Link to="/" className="blog-list-back">
@@ -305,7 +306,8 @@ const BlogsList = () => {
         </div>
       </div>
       <CTAButton />
-    </>
+      <Footer />
+    </div>
   );
 };
 

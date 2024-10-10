@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import './BlogsList.css'; // Import the custom CSS file
 import CTAButton from '../CTAButton';
 import axios from 'axios';
+import Footer from '../Footer';
 
 const BlogsListByCategoryId = () => {
   const { id }: any = useParams();
@@ -129,20 +130,24 @@ const BlogsListByCategoryId = () => {
   };
 
   return (
-    <div className="blog-list-container">
-      <div className="blog-list-header">
-        <Link to="/categories" className="blog-list-back">
-          <i className="fas fa-arrow-left blog-list-back-icon"></i> Go To Categories
-        </Link>
-        <div className="blog-details-share">
-          {/* Social media icons with share functionality */}
+    <div className="d-flex">
+      <div className="blog-list-container">
+        <div className="blog-list-header">
+          <Link to="/categories" className="blog-list-back">
+            <i className="fas fa-arrow-left blog-list-back-icon"></i> Go To Categories
+          </Link>
+          <div className="blog-details-share">
+            {/* Social media icons with share functionality */}
+          </div>
         </div>
+
+        {/* Blog list grid */}
+        {renderBlogs()}
+
+        <CTAButton />
+
       </div>
-
-      {/* Blog list grid */}
-      {renderBlogs()}
-
-      <CTAButton />
+      <Footer />
     </div>
   );
 };

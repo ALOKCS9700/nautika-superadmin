@@ -8,3 +8,4 @@ export const getFromLocalStorage = (key: string) => {
 };
 
 export const nautika = require("../../assets/nautika-logo-2.png");
+export const footerTop = require("../../assets/footer_top.png");

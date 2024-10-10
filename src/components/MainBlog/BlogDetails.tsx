@@ -4,6 +4,7 @@ import './BlogDetails.css';
 import CommentSection from './CommentsSection';
 import CTAButton from '../CTAButton';
 import NotFoundSection from '../NotFoundSection';
+import Footer from '../Footer';
 
 const BlogDetails = () => {
   const { id }: any = useParams();
@@ -154,90 +155,106 @@ const BlogDetails = () => {
     setOpenFAQIndex(openFAQIndex === index ? null : index); // Toggle FAQ open/close
   };
 
-  return blog ? (
-    <div className="blog-details-container">
-      {/* Header with Back and Share Icons */}
-      <div className="blog-details-header">
-        <Link to="/blogs" className="blog-details-back">
-          <i className="fas fa-arrow-left blog-details-back-icon"></i> Back
-        </Link>
-        <div className="blog-details-share">
-          <i className="fab fa-whatsapp blog-details-share-icon" onClick={handleWhatsAppShare} style={{ color: '#25D366' }}></i>
-          <i className="fab fa-linkedin blog-details-share-icon" onClick={handleLinkedInShare} style={{ color: '#0077B5' }}></i>
-          <i className="fab fa-facebook blog-details-share-icon" onClick={handleFacebookShare} style={{ color: '#1877F2' }}></i>
-          <i className="fa-brands fa-x-twitter blog-details-share-icon" onClick={handleTwitterShare} style={{ color: '#000' }}></i>
-          <i className="fas fa-copy blog-details-share-icon" onClick={handleCopyLink}></i>
-        </div>
-      </div>
-
-      {/* Blog Content */}
-      <div className="blog-details-content">
-        <img src={blog.image} alt={blog.title} className="blog-details-banner" />
-        <h1 className="blog-details-title">{blog.title}</h1>
-        <p className="blog-details-meta">{blog.readTime} read • {blog.formattedDate}</p>
-        <div className="blog-details-text" dangerouslySetInnerHTML={{ __html: blog.content }} />
-
-        {/* FAQ Section */}
-        {blog.faqs && (
-          <div className="faq-section">
-            <h2>Frequently Asked Questions</h2>
-            <ul className="faq-list">
-              {blog.faqs.map((item: any, index: number) => (
-                <li key={index} className={`faq-item ${openFAQIndex === index ? 'open' : ''}`}>
-                  <div className="faq-question" onClick={() => toggleFAQ(index)}>
-                    <strong>Q: {item.question}</strong>
-                    <i className={`faq-toggle-icon ${openFAQIndex === index ? 'open' : ''}`}>
-                      {openFAQIndex === index ? '-' : '+'}
-                    </i>
-                  </div>
-                  {openFAQIndex === index && (
-                    <div className="faq-answer">
-                      <p dangerouslySetInnerHTML={{ __html: item.answer }} />
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <CommentSection blogId={blog._id} />
-
-        {/* Recommended Blogs Section */}
-        {relatedBlogs.length > 0 && (
-          <div className="recommended-blogs">
-            <h2>Recommended Blogs</h2>
-            <div className="recommended-blogs-grid">
-              {relatedBlogs.map((relatedBlog: any) => (
-                <div key={relatedBlog._id} className="recommended-blog-card">
-                  <Link to={`/blog/${relatedBlog._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <img src={relatedBlog.image} alt={relatedBlog.title} />
-                    <div className="recommended-blog-content">
-                      <h3>{relatedBlog.title.length > 30 ? `${relatedBlog.title.slice(0, 30)}...` : relatedBlog.title}</h3>
-                      <p>{relatedBlog.readTime} read • {relatedBlog.formattedDate}</p>
-                    </div>
-                  </Link>
-                </div>
-              ))}
+  return (
+    <div className="d-flex">
+      {blog ? (
+        <div className="blog-details-container">
+          {/* Header with Back and Share Icons */}
+          <div className="blog-details-header">
+            <Link to="/blogs" className="blog-details-back">
+              <i className="fas fa-arrow-left blog-details-back-icon"></i> Back
+            </Link>
+            <div className="blog-details-share">
+              <i className="fab fa-whatsapp blog-details-share-icon" onClick={handleWhatsAppShare} style={{ color: '#25D366' }}></i>
+              <i className="fab fa-linkedin blog-details-share-icon" onClick={handleLinkedInShare} style={{ color: '#0077B5' }}></i>
+              <i className="fab fa-facebook blog-details-share-icon" onClick={handleFacebookShare} style={{ color: '#1877F2' }}></i>
+              <i className="fa-brands fa-x-twitter blog-details-share-icon" onClick={handleTwitterShare} style={{ color: '#000' }}></i>
+              <i className="fas fa-copy blog-details-share-icon" onClick={handleCopyLink}></i>
             </div>
           </div>
-        )}
-      </div>
 
-      <div className="blog-list-copy-alert">
-        Link copied to clipboard!
-      </div>
-      <CTAButton />
+          {/* Blog Content */}
+          <div className="blog-details-content">
+            <img src={blog.image} alt={blog.title} className="blog-details-banner" />
+            <h1 className="blog-details-title">{blog.title}</h1>
+            <p className="blog-details-meta">{blog.readTime} read • {blog.formattedDate}</p>
+            <div className="blog-details-text" dangerouslySetInnerHTML={{ __html: blog.content }} />
+
+            {/* FAQ Section */}
+            {blog.faqs && (
+              <div className="faq-section">
+                <h2>Frequently Asked Questions</h2>
+                <ul className="faq-list">
+                  {blog.faqs.map((item: any, index: number) => (
+                    <li key={index} className={`faq-item ${openFAQIndex === index ? 'open' : ''}`}>
+                      <div className="faq-question" onClick={() => toggleFAQ(index)}>
+                        <strong>Q: {item.question}</strong>
+                        <i className={`faq-toggle-icon ${openFAQIndex === index ? 'open' : ''}`}>
+                          {openFAQIndex === index ? '-' : '+'}
+                        </i>
+                      </div>
+                      {openFAQIndex === index && (
+                        <div className="faq-answer">
+                          <p dangerouslySetInnerHTML={{ __html: item.answer }} />
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <CommentSection blogId={blog._id} />
+
+            {/* Recommended Blogs Section */}
+            {relatedBlogs.length > 0 && (
+              <div className="recommended-blogs">
+                <h2>Recommended Blogs</h2>
+                <div className="recommended-blogs-grid">
+                  {relatedBlogs.map((relatedBlog: any) => (
+                    <div
+                      key={relatedBlog._id}
+                      className={`recommended-blog-card ${relatedBlogs.length === 1 ? "ifonecardStyle" : ""}`}
+                    >
+                      <Link
+                        to={`/blog/${relatedBlog._id}`}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                      >
+                        <img src={relatedBlog.image} alt={relatedBlog.title} />
+                        <div className="recommended-blog-content">
+                          <h3>
+                            {relatedBlog.title.length > 30
+                              ? `${relatedBlog.title.slice(0, 30)}...`
+                              : relatedBlog.title}
+                          </h3>
+                          <p>{relatedBlog.readTime} read • {relatedBlog.formattedDate}</p>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
+
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="blog-list-copy-alert">
+            Link copied to clipboard!
+          </div>
+          <CTAButton />
+        </div>
+      ) : (
+        <div style={{ width: '100%', height: "100%" }}>
+          <NotFoundSection
+            heading="Blog Not Found"
+            subheading="The blog you're trying to view doesn't exist or may have been removed. Please check the URL or explore other blogs."
+            isShowBtn={true}
+          />
+        </div>
+      )}
+      <Footer />
     </div>
-  ) : (
-    <div style={{ width: '100%', height: "100%" }}>
-      <NotFoundSection
-        heading="Blog Not Found"
-        subheading="The blog you're trying to view doesn't exist or may have been removed. Please check the URL or explore other blogs."
-        isShowBtn={true}
-      />
-    </div>
-  );
+  )
 };
 
 export default BlogDetails;

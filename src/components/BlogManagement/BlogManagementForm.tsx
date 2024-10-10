@@ -1,99 +1,182 @@
-import React, { useState, useEffect } from "react";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import axios from 'axios';
+import React, { useState, useEffect, useRef } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import axios from "axios";
 
-const BlogForm: React.FC<{ blog: any | null, onSave: (blog: any) => void, onClose: () => void }> = ({ blog, onSave, onClose }) => {
+// Custom modules and formats for ReactQuill
+// const Quillmodules = {
+//   toolbar: [
+//     [{ header: [1, 2, 3, 4, 5, 6, false] }],
+//     [{ size: ["small", false, "large", "huge"] }],
+//     [
+//       {
+//         color: [
+//           "#000000", "#e60000", "#ff9900", "#ffff00", "#008a00", "#0066cc",
+//           "#9933ff", "#ffffff", "#facccc", "#ffebcc", "#ffffcc", "#cce8cc",
+//           "#cce0f5", "#ebd6ff", "#bbbbbb", "#f06666", "#ffc266", "#ffff66",
+//           "#66b966", "#66a3e0", "#c285ff", "#888888", "#a10000", "#b26b00",
+//           "#b2b200", "#006100", "#0047b2", "#6b24b2", "#444444", "#5c0000",
+//           "#663d00", "#666600", "#003700", "#002966", "#3d1466", 'custom-color'
+//         ],
+//       },
+//     ],
+//     ["bold", "italic", "underline", "strike", "blockquote"],
+//     [{ list: "ordered" }, { list: "bullet" }],
+//     ["link", "image"],
+//     [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }, { align: [] }], ["image-small", "image-medium", "image-large"], 
+   
+//     ,
+//   ],
+//   handlers: {
+//     // image: (quillRef: any) => handleImageUpload(quillRef), // Custom handler for image uploads
+//     "image-small": (quillRef: any) => changeImageSize(quillRef, "small"),
+//     "image-medium": (quillRef: any) => changeImageSize(quillRef, "medium"),
+//     "image-large": (quillRef: any) => changeImageSize(quillRef, "large"),
+//   },
+// };
+
+const formats = [
+  "header", "height", "bold", "italic", "underline", "strike",
+  "blockquote", "list", "color", "bullet", "indent", "link",
+  "image", "align", "size",
+];
+
+const BlogForm: React.FC<{
+  blog: any | null;
+  onSave: (blog: any) => void;
+  onClose: () => void;
+}> = ({ blog, onSave, onClose }) => {
   const [title, setTitle] = useState(blog ? blog.title : "");
   const [content, setContent] = useState(blog ? blog.content : "");
-  const [faq, setFaq] = useState<Array<{ question: string, answer: string }>>(blog && blog.faqs ? blog.faqs : []); // Ensure faq is an array
-  const [imageFile, setImageFile] = useState<File | null>(null); // For the image file upload
-  const [imageUrl, setImageUrl] = useState<string | null>(blog ? blog.image : null); // For the image URL returned by API
+  const [faq, setFaq] = useState<Array<{ question: string; answer: string }>>(
+    blog && blog.faqs ? blog.faqs : []
+  );
+  const [imageUrl, setImageUrl] = useState<string | null>(
+    blog ? blog.image : null
+  );
   const [categoryId, setCategoryId] = useState(blog ? blog.categoryId : "");
-  const [categoryName, setCategoryName] = useState(blog ? blog.categoryName : "");
+  const [categoryName, setCategoryName] = useState(
+    blog ? blog.categoryName : ""
+  );
   const [status, setStatus] = useState(blog ? blog.status === "Published" : false);
-  const [readTime, setReadTime] = useState<number | null>(null); // Automatically calculated read time
+  const [readTime, setReadTime] = useState<number | null>(null);
   const [createdAt] = useState(blog ? blog.createdAt : new Date().toISOString());
-  const [categories, setCategories] = useState<any[]>([]); // Categories from API
+  const [categories, setCategories] = useState<any[]>([]);
+  const quillRef = useRef<ReactQuill | null>(null);
 
+  const Quillmodules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ size: ["small", false, "large", "huge"] }],
+      [
+        {
+          color: [
+            "#000000", "#e60000", "#ff9900", "#ffff00", "#008a00", "#0066cc",
+            "#9933ff", "#ffffff", "#facccc", "#ffebcc", "#ffffcc", "#cce8cc",
+            "#cce0f5", "#ebd6ff", "#bbbbbb", "#f06666", "#ffc266", "#ffff66",
+            "#66b966", "#66a3e0", "#c285ff", "#888888", "#a10000", "#b26b00",
+            "#b2b200", "#006100", "#0047b2", "#6b24b2", "#444444", "#5c0000",
+            "#663d00", "#666600", "#003700", "#002966", "#3d1466", 'custom-color'
+          ],
+        },
+      ],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "image"],
+      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }, { align: [] }], ["image-small", "image-medium", "image-large"],
+      ,
+    ],
+  };
   useEffect(() => {
-    // Fetch categories from API
     async function fetchCategories() {
-      const response = await axios.get("https://oglitz-backend-node.onrender.com/admin/nautika/categories");
+      const response = await axios.get(
+        "https://oglitz-backend-node.onrender.com/admin/nautika/categories"
+      );
       setCategories(response.data);
     }
     fetchCategories();
   }, []);
 
   useEffect(() => {
-    // Automatically calculate and update read time whenever the content changes
     calculateReadTime(content);
   }, [content]);
 
-  // Function to calculate read time based on word count
   const calculateReadTime = (text: string) => {
-    const words = text.trim().split(/\s+/).length; // Split content by spaces to get the word count
-    const estimatedTime = Math.ceil(words / 200); // 200 words per minute reading speed
+    const words = text.trim().split(/\s+/).length;
+    const estimatedTime = Math.ceil(words / 200);
     setReadTime(estimatedTime);
   };
 
-  // Function to upload image and return the URL
-  const uploadImage = async (file: File) => {
+  const uploadImage = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("file", file);
+
     try {
-      const formData = new FormData();
-      formData.append('file', file);
+      const response = await axios.post(
+        "https://oglitz-backend-node.onrender.com/admin/intro/upload-image",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-      const response = await axios.post("https://oglitz-backend-node.onrender.com/admin/intro/upload-image", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      // Return the uploaded image URL
-      return `https://oglitz-backend-node.onrender.com${response.data.fileUrl}`;
+      const imageUrl = `https://oglitz-backend-node.onrender.com${response.data.fileUrl}`;
+      return imageUrl;
     } catch (error) {
-      console.error('Error uploading image:', error);
-      return null;
+      console.error("Error uploading image:", error);
+      return "";
     }
   };
 
-  const handleSave = async () => {
-    let finalImageUrl = imageUrl;
+  const handleImageUpload = () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
 
-    // If a new image is selected, upload it
-    if (imageFile) {
-      const uploadedImageUrl = await uploadImage(imageFile);
+    input.onchange = async () => {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const imageUrl = await uploadImage(file);
+        if (imageUrl && quillRef.current) {
+          const quill = quillRef.current.getEditor();
+          const range: any = quill.getSelection();
+          quill.insertEmbed(range.index, "image", imageUrl);
+        }
+      }
+    };
+  };
+
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const uploadedImageUrl = await uploadImage(file);
       if (uploadedImageUrl) {
-        finalImageUrl = uploadedImageUrl; // Update with the uploaded image URL
+        setImageUrl(uploadedImageUrl);
       }
     }
+  };
 
+  const handleSave = () => {
     const newBlog = {
-      _id: blog ? blog._id : undefined,  // Ensure the blog has an id for both new and updated blogs
+      _id: blog ? blog._id : undefined,
       title,
       content,
       faqs: faq,
-      image: finalImageUrl,  // Use the uploaded image URL
+      image: imageUrl,
       categoryId,
       categoryName,
       status: status ? "Published" : "Draft",
       readTime,
       createdAt,
     };
-
     onSave(newBlog);
   };
 
   const handleAddFaq = () => {
     setFaq([...faq, { question: "", answer: "" }]);
-  };
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const file: any = event.target.files[0];
-      setImageFile(file); // Set the image file to upload
-      setImageUrl(URL.createObjectURL(file)); // Set a temporary URL for preview
-    }
   };
 
   return (
@@ -113,25 +196,40 @@ const BlogForm: React.FC<{ blog: any | null, onSave: (blog: any) => void, onClos
 
       <div className="form-group">
         <label>Content</label>
-        <ReactQuill className="ReactQuillStyle" value={content} onChange={setContent} />
+        <ReactQuill
+          ref={quillRef}
+          value={content}
+          onChange={setContent}
+          modules={Quillmodules}
+          formats={formats}
+          placeholder="write here...."
+        />
       </div>
 
-      {/* Displaying Read Time at the top */}
       <div className="form-group">
         <label>Estimated Read Time: {readTime ? `${readTime} min` : "Calculating..."}</label>
       </div>
 
-      {/* Category selection from API */}
       <div className="form-group">
         <label>Category</label>
-        <select className="form-control" value={categoryId} onChange={(e) => {
-          const selectedCategory = categories.find((cat) => cat._id === e.target.value);
-          setCategoryId(selectedCategory._id);
-          setCategoryName(selectedCategory.name);
-        }}>
-          <option value="" disabled>Select category</option>
+        <select
+          className="form-control"
+          value={categoryId}
+          onChange={(e) => {
+            const selectedCategory = categories.find(
+              (cat) => cat._id === e.target.value
+            );
+            setCategoryId(selectedCategory._id);
+            setCategoryName(selectedCategory.name);
+          }}
+        >
+          <option value="" disabled>
+            Select category
+          </option>
           {categories.map((cat, index) => (
-            <option key={index} value={cat._id}>{cat.name}</option>
+            <option key={index} value={cat._id}>
+              {cat.name}
+            </option>
           ))}
         </select>
       </div>
@@ -146,7 +244,9 @@ const BlogForm: React.FC<{ blog: any | null, onSave: (blog: any) => void, onClos
             name="status"
             onChange={() => setStatus(!status)}
           />
-          <label htmlFor="status" className="form-check-label">{status ? "Published" : "Draft"}</label>
+          <label htmlFor="status" className="form-check-label">
+            {status ? "Published" : "Draft"}
+          </label>
         </div>
       </div>
 
@@ -166,37 +266,48 @@ const BlogForm: React.FC<{ blog: any | null, onSave: (blog: any) => void, onClos
       </div>
 
       <h4>FAQ Section</h4>
-      {faq.length > 0 ? faq.map((faqItem: any, index: number) => (
-        <div key={index} className="form-group">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Question"
-            value={faqItem.question}
-            onChange={(e) => {
-              const newFaq = [...faq];
-              newFaq[index].question = e.target.value;
-              setFaq(newFaq);
-            }}
-          />
-          <ReactQuill
-            value={faqItem.answer}
-            onChange={(value) => {
-              const newFaq = [...faq];
-              newFaq[index].answer = value;
-              setFaq(newFaq);
-            }}
-            className="ReactQuillStyle"
-          />
-        </div>
-      )) : (
+      {faq.length > 0 ? (
+        faq.map((faqItem, index) => (
+          <div key={index} className="form-group">
+            <input
+              type="text"
+              className="form-control faqQuestionStyle"
+              placeholder="Question"
+              value={faqItem.question}
+              onChange={(e) => {
+                const newFaq = [...faq];
+                newFaq[index].question = e.target.value;
+                setFaq(newFaq);
+              }}
+            />
+            <ReactQuill
+              className="ReactQuillStyle"
+              value={faqItem.answer}
+              onChange={(value) => {
+                const newFaq = [...faq];
+                newFaq[index].answer = value;
+                setFaq(newFaq);
+              }}
+              modules={Quillmodules}
+              formats={formats}
+              placeholder="write here...."
+            />
+          </div>
+        ))
+      ) : (
         <p>No FAQs added yet</p>
       )}
-      <button className="btn btn-secondary buttonSenStyle" onClick={handleAddFaq}>Add FAQ</button>
+      <button className="btn btn-secondary buttonSenStyle" onClick={handleAddFaq}>
+        Add FAQ
+      </button>
 
       <div className="form-group mt-4 addBlogStyle">
-        <button className="btn btn-success" onClick={handleSave}>Save</button>
-        <button className="btn btn-secondary buttonSenStyle" onClick={onClose}>Cancel</button>
+        <button className="btn btn-success " onClick={handleSave}>
+          Save
+        </button>
+        <button className="btn btn-secondary buttonSenStyle" onClick={onClose}>
+          Cancel
+        </button>
       </div>
     </div>
   );

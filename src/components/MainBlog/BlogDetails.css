@@ -470,3 +470,14 @@ button[type="submit"]:hover {
 .edit-user-info:hover {
   color: #007bb5; /* Change color on hover */
 }
+
+.blog-content img,
+.blog-details-text img {
+  height: 200px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.ifonecardStyle {
+  width: 250px;
+}

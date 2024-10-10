@@ -12,6 +12,7 @@ import BlogsList from "./components/MainBlog/BlogsList";
 import BlogDetails from "./components/MainBlog/BlogDetails";
 import BlogCategories from "./components/MainBlog/BlogCategories";
 import BlogsListByCategoryId from "./components/MainBlog/BlogsListByCategoryId";
+import ContactForm from "./components/ContactForm";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const App: React.FC = () => {
           <Route path="/blog/:id" exact component={BlogDetails} />
           <Route path="/blog-by-category/:id" exact component={BlogsListByCategoryId} />
           <Route path="/categories" exact component={BlogCategories} />
+          <Route path="/contact-us" exact component={ContactForm} />
 
           {/* Authentication Protected Routes */}
           <AccountRoute path="/login">

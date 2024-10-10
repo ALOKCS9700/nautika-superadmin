@@ -152,6 +152,12 @@ body {
   background-color: #f8f9fc; /* Same as card header */
 }
 
+.d-flex{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .HomeUserUI {
   display: flex;
   flex-wrap: wrap;

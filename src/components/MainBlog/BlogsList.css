@@ -62,6 +62,27 @@
 }
 
 .blog-list-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  /* justify-content: center; Center all cards */
+  align-items: start;
+}
+
+.blog-list-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  max-width: 340px;
+  flex: 1 1 300px; /* Allow cards to grow but keep a minimum size */
+  /* margin: 0 auto; Center individual cards when needed */
+}
+
+/* .blog-list-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
@@ -77,7 +98,7 @@
   position: relative;
   max-width: 340px;
   margin: 0 auto;
-}
+} */
 
 .blog-list-card:hover {
   transform: scale(1.05);

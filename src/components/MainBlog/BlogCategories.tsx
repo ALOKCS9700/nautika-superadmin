@@ -4,6 +4,7 @@ import './BlogCategories.css';
 import CTAButton from '../CTAButton';
 import NotFoundSection from '../NotFoundSection';
 import axios from 'axios';
+import Footer from '../Footer';
 
 const BlogCategories = () => {
   const [categories, setCategories] = useState<any[]>([]); // Set categories to an empty array initially
@@ -85,47 +86,72 @@ const BlogCategories = () => {
   };
 
   return (
-    <div className="blog-categories-container">
-      {/* Back button */}
-      <div className="blog-categories-back blog-categories-headerWithShare">
-        <Link to="/blogs" className="back-link">
-          <i className="fas fa-arrow-left"></i> Go To Blogs
-        </Link>
-        <div className="blog-details-share">
-          <i className="fab fa-whatsapp blog-details-share-icon" onClick={handleWhatsAppShare} style={{ color: '#25D366' }}></i>
-          <i className="fab fa-linkedin blog-details-share-icon" onClick={handleLinkedInShare} style={{ color: '#0077B5' }}></i>
-          <i className="fab fa-facebook blog-details-share-icon" onClick={handleFacebookShare} style={{ color: '#1877F2' }}></i>
-          <i className="fa-brands fa-x-twitter blog-details-share-icon" onClick={handleTwitterShare} style={{ color: '#000' }}></i>
-          <i className="fas fa-copy blog-details-share-icon" onClick={handleCopyLink}></i>
+    <div className="d-flex">
+
+      <div className="blog-categories-container">
+        {/* Back button */}
+        <div className="blog-categories-back blog-categories-headerWithShare">
+          <Link to="/blogs" className="back-link">
+            <i className="fas fa-arrow-left"></i> Go To Blogs
+          </Link>
+          <div className="blog-details-share">
+            <i className="fab fa-whatsapp blog-details-share-icon" onClick={handleWhatsAppShare} style={{ color: '#25D366' }}></i>
+            <i className="fab fa-linkedin blog-details-share-icon" onClick={handleLinkedInShare} style={{ color: '#0077B5' }}></i>
+            <i className="fab fa-facebook blog-details-share-icon" onClick={handleFacebookShare} style={{ color: '#1877F2' }}></i>
+            <i className="fa-brands fa-x-twitter blog-details-share-icon" onClick={handleTwitterShare} style={{ color: '#000' }}></i>
+            <i className="fas fa-copy blog-details-share-icon" onClick={handleCopyLink}></i>
+          </div>
         </div>
-      </div>
 
-      {/* Header */}
-      <h2 className="blog-categories-header">Blog Categories</h2>
+        {/* Header */}
+        <h2 className="blog-categories-header">Blog Categories</h2>
 
-      {/* Categories grid */}
-      {categories.length === 0 ? (
-        <NotFoundSection
-          heading="No Categories Available"
-          subheading="It looks like there are no categories available at the moment. Please try again later or explore other sections of our site."
-        />
-      ) : (
-        <div className="blog-categories-grid">
-          {categories.map((category: any) => (
-            <Link to={`/blog-by-category/${category._id}`} style={{ textDecoration: 'none', color: 'inherit' }} key={category._id}>
-              <div className="blog-categories-card">
-                {/* Image with error handling */}
-                <div className="blog-count-label">{category.blogCount || 4} Blogs</div>
-                {category.image ? (
-                  <>
-                    <img src={category.image} alt={category.name} onError={handleImageError} />
-                    {/* Placeholder div initially hidden, shown on image error */}
+        {/* Categories grid */}
+        {categories.length === 0 ? (
+          <NotFoundSection
+            heading="No Categories Available"
+            subheading="It looks like there are no categories available at the moment. Please try again later or explore other sections of our site."
+          />
+        ) : (
+          <div className="blog-categories-grid">
+            {categories.map((category: any) => (
+              <Link to={`/blog-by-category/${category._id}`} style={{ textDecoration: 'none', color: 'inherit' }} key={category._id}>
+                <div className="blog-categories-card">
+                  {/* Image with error handling */}
+                  <div className="blog-count-label">{category.blogCount || 4} Blogs</div>
+                  {category.image ? (
+                    <>
+                      <img src={category.image} alt={category.name} onError={handleImageError} />
+                      {/* Placeholder div initially hidden, shown on image error */}
+                      <div
+                        className="blog-categories-placeholder"
+                        style={{
+                          backgroundColor: "#012367",
+                          // backgroundColor: getRandomColor(),
+                          display: 'none', // Initially hidden
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          // width: '100%',
+                          // height: '150px',
+                          color: '#fff',
+                          fontSize: '24px',
+                          fontWeight: 'bold',
+                          width: "100%",
+                          height: "180px",
+                          borderBottom: "1px solid #ddd",
+                          minWidth: "350px",
+                        }}
+                      >
+                        {category.name.slice(0, 2).toUpperCase()}
+                      </div>
+                    </>
+                  ) : (
                     <div
                       className="blog-categories-placeholder"
                       style={{
-                        backgroundColor: "#012367",
                         // backgroundColor: getRandomColor(),
-                        display: 'none', // Initially hidden
+                        backgroundColor: "#012367",
+                        display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
                         // width: '100%',
@@ -141,41 +167,20 @@ const BlogCategories = () => {
                     >
                       {category.name.slice(0, 2).toUpperCase()}
                     </div>
-                  </>
-                ) : (
-                  <div
-                    className="blog-categories-placeholder"
-                    style={{
-                      // backgroundColor: getRandomColor(),
-                      backgroundColor: "#012367",
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      // width: '100%',
-                      // height: '150px',
-                      color: '#fff',
-                      fontSize: '24px',
-                      fontWeight: 'bold',
-                      width: "100%",
-                      height: "180px",
-                      borderBottom: "1px solid #ddd",
-                      minWidth: "350px",
-                    }}
-                  >
-                    {category.name.slice(0, 2).toUpperCase()}
-                  </div>
-                )}
-                <div className="blog-categories-card-content">
-                  <h3 className="blog-categories-title">{category.name}</h3>
-                  <p className="blog-categories-description">{truncateDescription(category.description, 40)}</p>
+                  )}
+                  <div className="blog-categories-card-content">
+                    <h3 className="blog-categories-title">{category.name}</h3>
+                    <p className="blog-categories-description">{truncateDescription(category.description, 40)}</p>
 
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      )}
-      <CTAButton />
+              </Link>
+            ))}
+          </div>
+        )}
+        <CTAButton />
+      </div>
+      <Footer />
     </div>
   );
 };
