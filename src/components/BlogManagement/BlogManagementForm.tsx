@@ -3,42 +3,10 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 
-// Custom modules and formats for ReactQuill
-// const Quillmodules = {
-//   toolbar: [
-//     [{ header: [1, 2, 3, 4, 5, 6, false] }],
-//     [{ size: ["small", false, "large", "huge"] }],
-//     [
-//       {
-//         color: [
-//           "#000000", "#e60000", "#ff9900", "#ffff00", "#008a00", "#0066cc",
-//           "#9933ff", "#ffffff", "#facccc", "#ffebcc", "#ffffcc", "#cce8cc",
-//           "#cce0f5", "#ebd6ff", "#bbbbbb", "#f06666", "#ffc266", "#ffff66",
-//           "#66b966", "#66a3e0", "#c285ff", "#888888", "#a10000", "#b26b00",
-//           "#b2b200", "#006100", "#0047b2", "#6b24b2", "#444444", "#5c0000",
-//           "#663d00", "#666600", "#003700", "#002966", "#3d1466", 'custom-color'
-//         ],
-//       },
-//     ],
-//     ["bold", "italic", "underline", "strike", "blockquote"],
-//     [{ list: "ordered" }, { list: "bullet" }],
-//     ["link", "image"],
-//     [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }, { align: [] }], ["image-small", "image-medium", "image-large"], 
-   
-//     ,
-//   ],
-//   handlers: {
-//     // image: (quillRef: any) => handleImageUpload(quillRef), // Custom handler for image uploads
-//     "image-small": (quillRef: any) => changeImageSize(quillRef, "small"),
-//     "image-medium": (quillRef: any) => changeImageSize(quillRef, "medium"),
-//     "image-large": (quillRef: any) => changeImageSize(quillRef, "large"),
-//   },
-// };
-
 const formats = [
   "header", "height", "bold", "italic", "underline", "strike",
   "blockquote", "list", "color", "bullet", "indent", "link",
-  "image", "align", "size",
+  "image", "align", "size", 'table',
 ];
 
 const BlogForm: React.FC<{
@@ -62,9 +30,10 @@ const BlogForm: React.FC<{
   const [readTime, setReadTime] = useState<number | null>(null);
   const [createdAt] = useState(blog ? blog.createdAt : new Date().toISOString());
   const [categories, setCategories] = useState<any[]>([]);
+  const [YoutubeVideoURl, setYoutubeVideoURl] = useState<any[]>([]);
   const quillRef = useRef<ReactQuill | null>(null);
 
-  const Quillmodules = {
+  const QuillModules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
       [{ size: ["small", false, "large", "huge"] }],
@@ -83,10 +52,43 @@ const BlogForm: React.FC<{
       ["bold", "italic", "underline", "strike", "blockquote"],
       [{ list: "ordered" }, { list: "bullet" }],
       ["link", "image"],
-      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }, { align: [] }], ["image-small", "image-medium", "image-large"],
-      ,
+      [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+      // ['table'], // Add the table option in the toolbar
     ],
+    // 'better-table': {
+    //   operationMenu: {
+    //     items: {
+    //       unmergeCells: {
+    //         text: 'Unmerge Cells',
+    //       },
+    //       mergeCells: {
+    //         text: 'Merge Cells',
+    //       },
+    //       insertColumnRight: {
+    //         text: 'Insert Column Right',
+    //       },
+    //       insertColumnLeft: {
+    //         text: 'Insert Column Left',
+    //       },
+    //       insertRowUp: {
+    //         text: 'Insert Row Above',
+    //       },
+    //       insertRowDown: {
+    //         text: 'Insert Row Below',
+    //       },
+    //       deleteRow: {
+    //         text: 'Delete Row',
+    //       },
+    //       deleteColumn: {
+    //         text: 'Delete Column',
+    //       },
+    //     },
+    //   },
+    // },
   };
+
+
+
   useEffect(() => {
     async function fetchCategories() {
       const response = await axios.get(
@@ -171,6 +173,7 @@ const BlogForm: React.FC<{
       status: status ? "Published" : "Draft",
       readTime,
       createdAt,
+      youTubeVideoUrl: YoutubeVideoURl,
     };
     onSave(newBlog);
   };
@@ -200,7 +203,7 @@ const BlogForm: React.FC<{
           ref={quillRef}
           value={content}
           onChange={setContent}
-          modules={Quillmodules}
+          modules={QuillModules}
           formats={formats}
           placeholder="write here...."
         />
@@ -264,6 +267,16 @@ const BlogForm: React.FC<{
           </div>
         )} */}
       </div>
+      <div className="form-group">
+        <label>YouTube Video URL</label>
+        <input
+          type="text"
+          className="form-control"
+          value={YoutubeVideoURl}
+          onChange={(e: any) => setYoutubeVideoURl(e.target.value)}
+          placeholder="Enter YouTube Video URL"
+        />
+      </div>
 
       <h4>FAQ Section</h4>
       {faq.length > 0 ? (
@@ -288,7 +301,7 @@ const BlogForm: React.FC<{
                 newFaq[index].answer = value;
                 setFaq(newFaq);
               }}
-              modules={Quillmodules}
+              modules={QuillModules}
               formats={formats}
               placeholder="write here...."
             />
