@@ -16,6 +16,8 @@ import WithdrawManagement from "../WithdrawManagement/WithdrawManagement";
 import PaymentDetails from "../PaymentDetails/PaymentDetails";
 import BlogManagement from "../BlogManagement/BlogManagement";
 import BlogView from "../BlogManagement/BlogView";
+import TestimonialsManagement from "../TestimonialsManagement/TestimonialsManagement";
+import GalleryManagement from "../GalleryManagement/GalleryManagement";
 
 const Admin: React.FC = () => {
 
@@ -31,6 +33,8 @@ const Admin: React.FC = () => {
               {/* <Route path={`/users`}><Users /></Route> */}
               {/* <Route path={`/products`}><Products /></Route> */}
               <Route path={`/BlogManagement`}><BlogManagement /></Route>
+              <Route path={`/TestimonialsManagement`}><TestimonialsManagement /></Route>
+              <Route path={`/GalleryManagement`}><GalleryManagement /></Route>
               <Route path="/view-blog/:blogId"><BlogView /></Route>
               {/* <Route path={`/StockManagement`}><StockManagement /></Route> */}
               {/* <Route path={`/CommodityManagement`}><CommodityManagement /></Route> */}

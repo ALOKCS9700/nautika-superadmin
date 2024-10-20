@@ -1,0 +1,119 @@
+.testimonials-management {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.add-button {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.testimonials-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.testimonials-table th,
+.testimonials-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.testimonials-table th {
+  background-color: #f2f2f2;
+}
+
+.cover-image {
+  /* width: 50px; */
+  /* height: auto; */
+  width: 85px;
+  object-fit: contain;
+  height: 85px;
+}
+
+.testimonial-form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.testimonial-form input,
+.testimonial-form textarea {
+  padding: 8px;
+  width: 100%;
+  /* max-width: 400px; */
+}
+
+.save-button {
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+  border-radius: 8px;
+}
+
+.cancel-button {
+  padding: 10px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+  border-radius: 8px;
+}
+
+.edit-button,
+.delete-button {
+  margin-right: 5px;
+  padding: 5px 8px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.edit-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.twoBtnStyle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: flex-end;
+}
+
+.videoandInputVideoURl {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.videoPreview {
+  width: 350px;
+  height: 200px;
+  object-fit: contain;
+  border: 0.3px solid #b5b5b5;
+}

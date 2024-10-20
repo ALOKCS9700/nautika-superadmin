@@ -27,7 +27,7 @@ const BlogManagement: React.FC = () => {
   const fetchBlogs = async () => {
     try {
       const response = await api.get("/blogs");
-      setBlogs(response.data);
+      setBlogs(response.data.blogs);
     } catch (error) {
       console.error("Error fetching blogs:", error);
     }

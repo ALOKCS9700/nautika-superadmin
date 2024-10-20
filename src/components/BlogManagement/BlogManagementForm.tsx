@@ -30,7 +30,10 @@ const BlogForm: React.FC<{
   const [readTime, setReadTime] = useState<number | null>(null);
   const [createdAt] = useState(blog ? blog.createdAt : new Date().toISOString());
   const [categories, setCategories] = useState<any[]>([]);
-  const [YoutubeVideoURl, setYoutubeVideoURl] = useState<any[]>([]);
+  const [YoutubeVideoURl, setYoutubeVideoURl] = useState(blog ? blog.videoUrl : "" as any);
+  const [metaTitle, setmetaTitle] = useState(blog ? blog.metaTitle : "" as any);
+  const [metaDescription, setmetaDescription] = useState(blog ? blog.metaDescription : "" as any);
+  const [metaKeywords, setmetaKeywords] = useState(blog ? blog.metaKeywords : "" as any);
   const quillRef = useRef<ReactQuill | null>(null);
 
   const QuillModules = {
@@ -173,7 +176,10 @@ const BlogForm: React.FC<{
       status: status ? "Published" : "Draft",
       readTime,
       createdAt,
-      youTubeVideoUrl: YoutubeVideoURl,
+      videoUrl: YoutubeVideoURl,
+      metaTitle,
+      metaDescription,
+      metaKeywords,
     };
     onSave(newBlog);
   };
@@ -275,6 +281,36 @@ const BlogForm: React.FC<{
           value={YoutubeVideoURl}
           onChange={(e: any) => setYoutubeVideoURl(e.target.value)}
           placeholder="Enter YouTube Video URL"
+        />
+      </div>
+      <div className="form-group">
+        <label>Meta Title</label>
+        <input
+          type="text"
+          className="form-control"
+          value={metaTitle}
+          onChange={(e: any) => setmetaTitle(e.target.value)}
+          placeholder="Enter Meta Title"
+        />
+      </div>
+      <div className="form-group">
+        <label>Meta Description</label>
+        <input
+          type="text"
+          className="form-control"
+          value={metaDescription}
+          onChange={(e: any) => setmetaDescription(e.target.value)}
+          placeholder="Enter Meta Description"
+        />
+      </div>
+      <div className="form-group">
+        <label>Meta Keywords</label>
+        <input
+          type="text"
+          className="form-control"
+          value={metaKeywords}
+          onChange={(e: any) => setmetaKeywords(e.target.value)}
+          placeholder="Enter Meta Keywords"
         />
       </div>
 
