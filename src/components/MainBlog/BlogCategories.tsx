@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import './BlogCategories.css';
-import CTAButton from '../CTAButton';
-import NotFoundSection from '../NotFoundSection';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import CTAButton from '../CTAButton';
 import Footer from '../Footer';
+import NotFoundSection from '../NotFoundSection';
+import './BlogCategories.css';
 
 const BlogCategories = () => {
   const [categories, setCategories] = useState<any[]>([]); // Set categories to an empty array initially
@@ -40,8 +40,6 @@ const BlogCategories = () => {
     return description; // Return original if it's shorter than maxLength
   };
 
-  // Handle image error (fallback to placeholder)
-  // Handle image error (fallback to placeholder)
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.style.display = 'none'; // Hide the broken image
     const placeholder = e.currentTarget.nextElementSibling as HTMLElement; // Type assertion to HTMLElement
@@ -127,12 +125,9 @@ const BlogCategories = () => {
                         className="blog-categories-placeholder"
                         style={{
                           backgroundColor: "#012367",
-                          // backgroundColor: getRandomColor(),
                           display: 'none', // Initially hidden
                           justifyContent: 'center',
                           alignItems: 'center',
-                          // width: '100%',
-                          // height: '150px',
                           color: '#fff',
                           fontSize: '24px',
                           fontWeight: 'bold',
@@ -149,13 +144,10 @@ const BlogCategories = () => {
                     <div
                       className="blog-categories-placeholder"
                       style={{
-                        // backgroundColor: getRandomColor(),
                         backgroundColor: "#012367",
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        // width: '100%',
-                        // height: '150px',
                         color: '#fff',
                         fontSize: '24px',
                         fontWeight: 'bold',

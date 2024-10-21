@@ -1,8 +1,7 @@
-import React, { useState, Dispatch } from "react";
+import React, { Dispatch, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { LOGIN_SUCCESS, logout } from "../../store/actions/account.actions";
+import { LOGIN_SUCCESS } from "../../store/actions/account.actions";
 import { IStateType } from "../../store/models/root.interface";
-import { IAccount } from "../../store/models/account.interface";
 
 function TopMenuAccount(): JSX.Element {
   const dispatch: Dispatch<any> = useDispatch();
@@ -31,13 +30,12 @@ function TopMenuAccount(): JSX.Element {
         onClick={() => {
           setShow(!isShow);
         }}
-        // href="# "
         id="userDropdown"
         role="button"
         data-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded="false">
-        <div className="ProfileStyle">
+        <div style={{ cursor: "pointer" }} className="ProfileStyle">
           <span className="mr-2 d-none d-lg-inline small cadet">{account.fullName}</span>
           <span className="mr-2 d-none d-lg-inline small cadet">{account.email}</span>
         </div>
@@ -49,7 +47,6 @@ function TopMenuAccount(): JSX.Element {
         aria-labelledby="userDropdown">
         <div className="dropdown-item"
           onClick={() => logOut()}
-          // to="# "
           style={{ cursor: "pointer" }}
           data-toggle="modal"
           data-target="#logoutModal">

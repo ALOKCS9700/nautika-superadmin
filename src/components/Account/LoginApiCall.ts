@@ -34,10 +34,8 @@ export const loginApiCall = (email: string, password: string) => {
         });
         const dataToStore = response.data.data;
 
-        // Convert the object to a JSON string
         const dataString = JSON.stringify(dataToStore);
 
-        // Store the JSON string in localStorage
         localStorage.setItem("loginUserData", dataString); // Optionally store token in localStorage or sessionStorage
         localStorage.setItem("loginEmail", response.data.data.email);
         localStorage.setItem("logiFullName", response.data.data.fullName);
@@ -53,18 +51,6 @@ export const loginApiCall = (email: string, password: string) => {
         });
       }
     } catch (error) {
-      // Handle error
-      // dispatch(addNotification("Login Failure", `Login Failure`));
-      // localStorage.setItem("authToken", "tokenhai");
-      // dispatch({
-      //   type: LOGIN_SUCCESS,
-      //   payload: {
-      //     token: "tokenhai",
-      //     fullName: "Atul Mani",
-      //     email: "superadmin@gmail.com",
-      //     data: [], // Include data from response
-      //   },
-      // });
       dispatch({
         type: LOGIN_FAILURE,
         payload: {

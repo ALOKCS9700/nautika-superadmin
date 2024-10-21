@@ -1,7 +1,6 @@
 import React, { useState, FormEvent, Dispatch } from "react";
 import { OnChangeModel } from "../../common/types/Form.types";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../store/actions/account.actions";
 import TextInput from "../../common/components/TextInput";
 import { loginApiCall } from "./LoginApiCall";
 import Notifications from "../../common/components/Notification";
@@ -27,16 +26,8 @@ const Login: React.FC = () => {
   function submit(e: FormEvent<HTMLFormElement>): void {
     e.preventDefault();
     const dataToStore: any = [];
-
-    // Convert the object to a JSON string
-    // const dataString = JSON.stringify(dataToStore);
-    // localStorage.setItem("loginUserData", dataString); // Optionally store token in localStorage or sessionStorage
-    // localStorage.setItem("loginEmail", "info@oglitz.com");
-    // localStorage.setItem("logiFullName", "Oglitz Software");
-    // localStorage.setItem("authToken", "oglitz-software-token");
     if (isFormInvalid()) { return; }
     dispatch(loginApiCall(formState.email.value, formState.password.value));
-    // dispatch(login(formState.email.value));
   }
 
   function isFormInvalid() {
@@ -87,13 +78,6 @@ const Login: React.FC = () => {
                           label="Password"
                           placeholder="Password" />
                       </div>
-                      {/* <div className="form-group">
-                        <div className="custom-control custom-checkbox small">
-                          <input type="checkbox" className="custom-control-input" id="customCheck" />
-                          <label className="custom-control-label"
-                            htmlFor="customCheck">Remember Me</label>
-                        </div>
-                      </div> */}
                       <button
                         className={`btn btn-primary btn-user btn-block ${getDisabledClass()}`}
                         type="submit"

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { getFromLocalStorage, saveToLocalStorage } from "../../common/components/CommonFunction";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 // Set up axios with baseURL

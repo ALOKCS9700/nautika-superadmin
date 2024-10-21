@@ -1,6 +1,6 @@
 import React from 'react';
-import './Footer.css'; // Make sure to create this CSS file and include the styles
 import { footerTop, nautika } from '../common/components/CommonFunction';
+import './Footer.css'; // Make sure to create this CSS file and include the styles
 
 const Footer = () => {
     return (

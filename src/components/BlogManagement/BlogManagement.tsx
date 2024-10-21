@@ -1,11 +1,11 @@
-import React, { Fragment, useState, useEffect } from "react";
 import axios from "axios";
-import TopCard from "../../common/components/TopCard";
-import CategoryManagement from "./CategoryManagement";
+import React, { Fragment, useEffect, useState } from "react";
 import Popup from "reactjs-popup";
+import TopCard from "../../common/components/TopCard";
 import "./BlogManagement.css";
-import BlogList from "./BlogManagementList";
 import BlogForm from "./BlogManagementForm";
+import BlogList from "./BlogManagementList";
+import CategoryManagement from "./CategoryManagement";
 
 const api = axios.create({
   baseURL: "https://oglitz-backend-node.onrender.com/admin/nautika", // Base API URL

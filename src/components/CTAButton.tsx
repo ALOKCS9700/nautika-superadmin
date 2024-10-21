@@ -1,6 +1,6 @@
 import React from 'react';
-import './CTAButton.css'; // Import styles for the CTA button
 import { Link, useHistory } from 'react-router-dom';
+import './CTAButton.css'; // Import styles for the CTA button
 
 const CTAButton: React.FC = () => {
     const history = useHistory();

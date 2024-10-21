@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./GalleryManagement.css";
 import TopCard from "../../common/components/TopCard";
-import Popup from "reactjs-popup";
-import { addNotification } from "../../store/actions/notifications.action";
 import { useDispatch } from "react-redux";
 
 // Define the base API URLs for the gallery
@@ -73,8 +71,6 @@ const GalleryManagement = () => {
         try {
             const uploadedImages = await Promise.all(imageFiles.map(uploadImage));
             const uploadedCoverImage = coverImageFile ? await uploadImage(coverImageFile) : formData.coverImage;
-            // const ff = [formData.images, uploadedImages]
-            // console.log("ffffffffff", ff)
             const payload = {
                 ...formData,
                 images: uploadedImages,
@@ -190,7 +186,6 @@ const GalleryManagement = () => {
                 <div className="row">
                     <TopCard title="Total Gallery" text={`${galleryItems.length}`} icon="image" class="primary" />
                 </div>
-                {/* <button onClick={() => setFormVisible(true)}>Add New Gallery Item</button> */}
                 <button onClick={handleAddNew} className="add-button btn btn-success">Add New Gallery Item</button>
                 {formVisible && (
                     <form className="gallery-form">
@@ -269,7 +264,6 @@ const GalleryManagement = () => {
                                         <img key={index} src={img} alt={`Gallery ${index}`} width={50} style={{ marginRight: '5px' }} />
                                     ))}
                                 </td>
-                                {/* <td>{item.video_url}</td> */}
                                 <td><iframe src={getValidVideoUrl(item.video_url)} frameBorder="0" width="85" height="85"></iframe></td>
                                 <td>{new Date(item.dateCreated).toLocaleDateString()}</td>
                                 <td>
@@ -282,28 +276,7 @@ const GalleryManagement = () => {
                 </table>
 
             </div>
-            {/* <Popup
-                className="popup-modal"
-                open={popup}
-                onClose={() => setPopup(false)}
-                closeOnDocumentClick
-            >
-                <div className="popup-modal">
-                    <div className="popup-title">
-                        Are you sure?
-                    </div>
-                    <div className="popup-content">
-                        <button type="button"
-                            className="btn btn-danger"
-                            onClick={() => {
-                                dispatch(addNotification("Gallery Removed", `Gallery Item ${DeleteItem.title} was removed`));
-                                handleDelete(DeleteItem._id)
-                                setPopup(false);
-                            }}>Remove
-                        </button>
-                    </div>
-                </div>
-            </Popup> */}
+            
         </>
     );
 };

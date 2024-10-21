@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import axios from "axios";
 
 const formats = [
   "header", "height", "bold", "italic", "underline", "strike",
@@ -56,38 +56,8 @@ const BlogForm: React.FC<{
       [{ list: "ordered" }, { list: "bullet" }],
       ["link", "image"],
       [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
-      // ['table'], // Add the table option in the toolbar
     ],
-    // 'better-table': {
-    //   operationMenu: {
-    //     items: {
-    //       unmergeCells: {
-    //         text: 'Unmerge Cells',
-    //       },
-    //       mergeCells: {
-    //         text: 'Merge Cells',
-    //       },
-    //       insertColumnRight: {
-    //         text: 'Insert Column Right',
-    //       },
-    //       insertColumnLeft: {
-    //         text: 'Insert Column Left',
-    //       },
-    //       insertRowUp: {
-    //         text: 'Insert Row Above',
-    //       },
-    //       insertRowDown: {
-    //         text: 'Insert Row Below',
-    //       },
-    //       deleteRow: {
-    //         text: 'Delete Row',
-    //       },
-    //       deleteColumn: {
-    //         text: 'Delete Column',
-    //       },
-    //     },
-    //   },
-    // },
+    
   };
 
 
@@ -135,24 +105,7 @@ const BlogForm: React.FC<{
     }
   };
 
-  const handleImageUpload = () => {
-    const input = document.createElement("input");
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
-    input.click();
 
-    input.onchange = async () => {
-      if (input.files && input.files[0]) {
-        const file = input.files[0];
-        const imageUrl = await uploadImage(file);
-        if (imageUrl && quillRef.current) {
-          const quill = quillRef.current.getEditor();
-          const range: any = quill.getSelection();
-          quill.insertEmbed(range.index, "image", imageUrl);
-        }
-      }
-    };
-  };
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -267,11 +220,7 @@ const BlogForm: React.FC<{
           accept="image/*"
           onChange={handleImageChange}
         />
-        {/* {imageUrl && (
-          <div className="image-preview">
-            <img src={imageUrl} alt="Banner Preview" style={{ maxWidth: '100%', marginTop: '10px' }} />
-          </div>
-        )} */}
+      
       </div>
       <div className="form-group">
         <label>YouTube Video URL</label>

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import CTAButton from '../CTAButton';
+import Footer from '../Footer';
+import NotFoundSection from '../NotFoundSection';
 import './BlogDetails.css';
 import CommentSection from './CommentsSection';
-import CTAButton from '../CTAButton';
-import NotFoundSection from '../NotFoundSection';
-import Footer from '../Footer';
 
 const BlogDetails = () => {
   const { id }: any = useParams();
@@ -98,24 +98,7 @@ const BlogDetails = () => {
     setComment('');
   };
 
-  const formatCommentDate = (dateString: string) => {
-    const now = new Date();
-    const commentDate = new Date(dateString);
-    const diffInMs = now.getTime() - commentDate.getTime();
-    const diffInSeconds = Math.floor(diffInMs / 1000);
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    const diffInDays = Math.floor(diffInHours / 24);
-    const diffInMonths = Math.floor(diffInDays / 30);
-    const diffInYears = Math.floor(diffInMonths / 12);
-
-    if (diffInSeconds < 60) return 'just now';
-    if (diffInMinutes < 60) return `${diffInMinutes} minute(s) ago`;
-    if (diffInHours < 24) return `${diffInHours} hour(s) ago`;
-    if (diffInDays < 30) return `${diffInDays} day(s) ago`;
-    if (diffInMonths < 12) return `${diffInMonths} month(s) ago`;
-    return `${diffInYears} year(s) ago`;
-  };
+ 
 
   const handleWhatsAppShare = () => {
     const pageUrl = window.location.href;

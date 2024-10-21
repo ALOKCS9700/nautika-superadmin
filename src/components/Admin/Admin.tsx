@@ -2,18 +2,8 @@ import React, { Fragment } from "react";
 import LeftMenu from "../LeftMenu/LeftMenu";
 import TopMenu from "../TopMenu/TopMenu";
 import { Switch, Route } from "react-router";
-import Users from "../Users/Users";
-import Products from "../Products/Products";
-import Orders from "../Orders/Orders";
 import Home from "../Home/Home";
 import Notifications from "../../common/components/Notification";
-import UserManagement from "../UserManagement/UserManagement";
-import StockManagement from "../StockManagement/StockManagement";
-import CommodityManagement from "../CommodityManagement/CommodityManagement";
-import IntroManagement from "../IntroManagement/IntroManagement";
-import DepositManagement from "../DepositManagement/DepositManagement";
-import WithdrawManagement from "../WithdrawManagement/WithdrawManagement";
-import PaymentDetails from "../PaymentDetails/PaymentDetails";
 import BlogManagement from "../BlogManagement/BlogManagement";
 import BlogView from "../BlogManagement/BlogView";
 import TestimonialsManagement from "../TestimonialsManagement/TestimonialsManagement";
@@ -30,19 +20,10 @@ const Admin: React.FC = () => {
           <TopMenu />
           <div className="container-fluid">
             <Switch>
-              {/* <Route path={`/users`}><Users /></Route> */}
-              {/* <Route path={`/products`}><Products /></Route> */}
               <Route path={`/BlogManagement`}><BlogManagement /></Route>
               <Route path={`/TestimonialsManagement`}><TestimonialsManagement /></Route>
               <Route path={`/GalleryManagement`}><GalleryManagement /></Route>
               <Route path="/view-blog/:blogId"><BlogView /></Route>
-              {/* <Route path={`/StockManagement`}><StockManagement /></Route> */}
-              {/* <Route path={`/CommodityManagement`}><CommodityManagement /></Route> */}
-              {/* <Route path={`/IntroManagement`}><IntroManagement /></Route> */}
-              {/* <Route path={`/DepositManagement`}><DepositManagement /></Route> */}
-              {/* <Route path={`/WithdrawManagement`}><WithdrawManagement /></Route> */}
-              {/* <Route path={`/PaymentDetails`}><PaymentDetails /></Route> */}
-              {/* <Route path={`/orders`}><Orders /></Route> */}
               <Route path="/"><Home /></Route>
             </Switch>
           </div>

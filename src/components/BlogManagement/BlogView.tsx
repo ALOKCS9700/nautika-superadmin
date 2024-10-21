@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 
 const BlogView: React.FC = () => {
     const { blogId } = useParams<{ blogId: string }>();

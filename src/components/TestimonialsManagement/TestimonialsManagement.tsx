@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./TestimonialsManagement.css";
+import React, { useEffect, useState } from "react";
 import TopCard from "../../common/components/TopCard";
+import "./TestimonialsManagement.css";
 
 // Define the base API URLs for testimonials
 const api = axios.create({
@@ -139,7 +139,6 @@ const TestimonialsManagement = () => {
 
     return (
         <div className="testimonials-management">
-            {/* <h2>Testimonials Management</h2> */}
             <h1 className="h3 mb-2 text-gray-800">Testimonials Management</h1>
             <div className="row">
                 <TopCard title="Total Testimonials" text={`${testimonials.length}`} icon="star" class="primary" />
@@ -156,21 +155,13 @@ const TestimonialsManagement = () => {
                         value={formData.name}
                         onChange={handleInputChange}
                     />
-                    {/* <input
-                        type="text"
-                        name="type"
-                        placeholder="Type"
-                        value={formData.type}
-                        onChange={handleInputChange}
-                    /> */}
+                   
                     <div className="videoandInputVideoURl">
                         <input
                             type="file"
                             name="coverImage"
                             placeholder="Cover Image URL"
                             accept="image/*"
-                            // value={formData.coverImage}
-                            // onChange={handleInputChange}
                             onChange={handleImageChange}
                         />
                         {formData.coverImage && (

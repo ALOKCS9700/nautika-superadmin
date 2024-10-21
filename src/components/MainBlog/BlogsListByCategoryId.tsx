@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import './BlogsList.css'; // Import the custom CSS file
-import CTAButton from '../CTAButton';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import CTAButton from '../CTAButton';
 import Footer from '../Footer';
+import './BlogsList.css'; // Import the custom CSS file
 
 const BlogsListByCategoryId = () => {
   const { id }: any = useParams();

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './BlogsList.css'; // Import the custom CSS file
 import CTAButton from '../CTAButton';
-import NotFoundSection from '../NotFoundSection';
 import Footer from '../Footer';
+import NotFoundSection from '../NotFoundSection';
+import './BlogsList.css'; // Import the custom CSS file
 
 const BlogsList = () => {
   const [blogs, setBlogs] = useState([] as any);

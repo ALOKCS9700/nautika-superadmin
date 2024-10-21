@@ -2,8 +2,8 @@ import React, { PropsWithChildren, ReactElement } from "react";
 import { ICardProperties } from "../types/TopCard.types";
 
 function TopCard(props: PropsWithChildren<ICardProperties>): ReactElement {
-    const borderColorClass = props.status === 'profit' ? 'border-left-success' : props.status === 'loss' ? 'border-left-danger' : `border-left-${props.class}`;
-    const textColorClass = props.status === 'profit' ? 'text-success' : props.status === 'loss' ? 'text-danger' : 'text--gray-800';
+    const borderColorClass = `border-left-${props.class}`;
+    const textColorClass = 'text--gray-800';
     return (
         <div className="col-xl-3 col-md-6 mb-4">
             <div className={`card ${borderColorClass} shadow h-100 py-2 `}>
