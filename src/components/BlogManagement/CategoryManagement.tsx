@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 // Set up axios with baseURL
 const api = axios.create({
-    baseURL: "https://oglitz-backend-node.onrender.com/admin/nautika",
+    baseURL: "https://cms-backend-ftz7.onrender.com/admin/nautika",
 });
 
 // Utility function to compress image
@@ -121,7 +121,7 @@ const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 // Upload compressed image
                 const formData = new FormData();
                 formData.append("file", file); // Append the original file
-                const apiURL ="https://oglitz-backend-node.onrender.com/admin/intro/upload-image"
+                const apiURL = "https://cms-backend-ftz7.onrender.com/admin/intro/upload-image"
                 const response = await api.post(apiURL, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
@@ -129,7 +129,7 @@ const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 });
 
                 // Set the uploaded image URL
-                setNewCategory({ ...newCategory, image: `https://oglitz-backend-node.onrender.com${response.data.fileUrl}` });
+                setNewCategory({ ...newCategory, image: `https://cms-backend-ftz7.onrender.com${response.data.fileUrl}` });
             } catch (error) {
                 console.error("Error uploading image", error);
             }
@@ -192,22 +192,25 @@ const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {categories.map((category, index) => (
-                        <tr key={category._id}>
-                            <td>{index + 1}</td>
-                            <td>
-                                {category.image ? <img src={category.image} alt={category.name} style={{ width: '50px', height: '50px' }} /> : "No Image"}
-                            </td>
-                            <td>{category.name}</td>
-                            <td>{category.description}</td>
-                            <td className="listItemStyle">
-                                <button className="btn btn-warning mr-2" onClick={() => handleEditCategory(category)}>Edit</button>
-                                <button className="btn btn-danger" onClick={() => handleDeleteCategory(category._id)}>Delete</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
+                {categories.length > 0 && (
+                    <tbody>
+                        {categories.map((category, index) => (
+                            <tr key={category._id}>
+                                <td>{index + 1}</td>
+                                <td>
+                                    {category.image ? <img src={category.image} alt={category.name} style={{ width: '50px', height: '50px' }} /> : "No Image"}
+                                </td>
+                                <td>{category.name}</td>
+                                <td>{category.description}</td>
+                                <td className="listItemStyle">
+                                    <button className="btn btn-warning mr-2" onClick={() => handleEditCategory(category)}>Edit</button>
+                                    <button className="btn btn-danger" onClick={() => handleDeleteCategory(category._id)}>Delete</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                )}
+
             </table>
         </div>
     );

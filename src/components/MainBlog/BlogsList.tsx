@@ -28,7 +28,7 @@ const BlogsList = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('https://oglitz-backend-node.onrender.com/api/nautika/categories');
+        const response = await fetch('https://cms-backend-ftz7.onrender.com/api/nautika/categories');
         const data = await response.json();
 
         // Add "All" category statically at the beginning
@@ -58,7 +58,7 @@ const BlogsList = () => {
           searchText: searchQuery || '',
         };
 
-        const response = await fetch('https://oglitz-backend-node.onrender.com/api/nautika/blogs/search', {
+        const response = await fetch('https://cms-backend-ftz7.onrender.com/api/nautika/blogs/search', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

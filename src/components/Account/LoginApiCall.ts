@@ -10,7 +10,8 @@ import {
 export const loginApiCall = (email: string, password: string) => {
   return async (dispatch: Dispatch) => {
     try {
-      const response = await axios.post("https://oglitz-backend-node.onrender.com/admin/login", {
+     const response = await axios.post("https://cms-backend-ftz7.onrender.com/admin/login", {
+      // const response = await axios.post("https://cms-backend-ftz7.onrender.com/admin/login", {
         email,
         password,
       });

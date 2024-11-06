@@ -5,10 +5,10 @@ import "./TestimonialsManagement.css";
 
 // Define the base API URLs for testimonials
 const api = axios.create({
-    baseURL: "https://oglitz-backend-node.onrender.com/api/nautika/testimonials",
+    baseURL: "https://cms-backend-ftz7.onrender.com/api/nautika/testimonials",
 });
 const api2 = axios.create({
-    baseURL: "https://oglitz-backend-node.onrender.com/admin/nautika/testimonials",
+    baseURL: "https://cms-backend-ftz7.onrender.com/admin/nautika/testimonials",
 });
 
 const TestimonialsManagement = () => {
@@ -44,7 +44,7 @@ const TestimonialsManagement = () => {
 
         try {
             const response = await axios.post(
-                "https://oglitz-backend-node.onrender.com/admin/intro/upload-image",
+                "https://cms-backend-ftz7.onrender.com/admin/intro/upload-image",
                 formData,
                 {
                     headers: {
@@ -53,7 +53,7 @@ const TestimonialsManagement = () => {
                 }
             );
 
-            const imageUrl = `https://oglitz-backend-node.onrender.com${response.data.fileUrl}`;
+            const imageUrl = `https://cms-backend-ftz7.onrender.com${response.data.fileUrl}`;
             return imageUrl;
         } catch (error) {
             console.error("Error uploading image:", error);

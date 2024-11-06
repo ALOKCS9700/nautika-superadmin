@@ -13,7 +13,7 @@ const BlogCategories = () => {
     // Fetch categories from the API
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('https://oglitz-backend-node.onrender.com/api/nautika/categories');
+        const response = await axios.get('https://cms-backend-ftz7.onrender.com/api/nautika/categories');
         setCategories(response.data); // Set categories to the data from the API
       } catch (error) {
         console.error('Error fetching categories:', error);

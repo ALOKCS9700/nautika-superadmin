@@ -6,9 +6,11 @@ import "./BlogManagement.css";
 import BlogForm from "./BlogManagementForm";
 import BlogList from "./BlogManagementList";
 import CategoryManagement from "./CategoryManagement";
+import { addNotification } from "../../store/actions/notifications.action";
+import { useDispatch } from "react-redux";
 
 const api = axios.create({
-  baseURL: "https://oglitz-backend-node.onrender.com/admin/nautika", // Base API URL
+  baseURL: "https://cms-backend-ftz7.onrender.com/admin/nautika", // Base API URL
 });
 
 const BlogManagement: React.FC = () => {
@@ -17,7 +19,7 @@ const BlogManagement: React.FC = () => {
   const [selectedBlog, setSelectedBlog] = useState<any | null>(null);
   const [showCategoryPage, setShowCategoryPage] = useState(false);
   const [popup, setPopup] = useState(false);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     // Fetch blogs and categories from API when component mounts
     fetchBlogs();
@@ -79,7 +81,7 @@ const BlogManagement: React.FC = () => {
       <h1 className="h3 mb-2 text-gray-800">{showCategoryPage ? "Category Management" : "Blogs Management"}</h1>
       <div className="row">
         <TopCard title="Total Blogs" text={`${blogs.length}`} icon="book" class="primary" />
-        <TopCard title="Total Categories" text={`${categories.length}`} icon="list" class="info" />
+        <TopCard title="Total Categories" text={`${categories.length || 0}`} icon="list" class="info" />
       </div>
 
       {showCategoryPage ? (
@@ -97,8 +99,12 @@ const BlogManagement: React.FC = () => {
                 <div className="card-header py-3 headingWithButtonStyle">
                   <h6 className="m-0 font-weight-bold text-green">Blog List</h6>
                   <button className="btn btn-success" onClick={() => {
-                    setSelectedBlog(null);
-                    setPopup(true);
+                    if (categories.length > 0) {
+                      setSelectedBlog(null);
+                      setPopup(true);
+                    } else {
+                      dispatch(addNotification("Category Not Found", ` Please create atleast one category for Blog`));
+                    }
                   }}>
                     Add New Blog
                   </button>

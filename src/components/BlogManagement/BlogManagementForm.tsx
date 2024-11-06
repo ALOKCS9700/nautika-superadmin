@@ -57,7 +57,7 @@ const BlogForm: React.FC<{
       ["link", "image"],
       [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
     ],
-    
+
   };
 
 
@@ -65,7 +65,7 @@ const BlogForm: React.FC<{
   useEffect(() => {
     async function fetchCategories() {
       const response = await axios.get(
-        "https://oglitz-backend-node.onrender.com/admin/nautika/categories"
+        "https://cms-backend-ftz7.onrender.com/admin/nautika/categories"
       );
       setCategories(response.data);
     }
@@ -88,7 +88,7 @@ const BlogForm: React.FC<{
 
     try {
       const response = await axios.post(
-        "https://oglitz-backend-node.onrender.com/admin/intro/upload-image",
+        "https://cms-backend-ftz7.onrender.com/admin/intro/upload-image",
         formData,
         {
           headers: {
@@ -97,7 +97,7 @@ const BlogForm: React.FC<{
         }
       );
 
-      const imageUrl = `https://oglitz-backend-node.onrender.com${response.data.fileUrl}`;
+      const imageUrl = `https://cms-backend-ftz7.onrender.com${response.data.fileUrl}`;
       return imageUrl;
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -171,30 +171,35 @@ const BlogForm: React.FC<{
       <div className="form-group">
         <label>Estimated Read Time: {readTime ? `${readTime} min` : "Calculating..."}</label>
       </div>
-
-      <div className="form-group">
-        <label>Category</label>
-        <select
-          className="form-control"
-          value={categoryId}
-          onChange={(e) => {
-            const selectedCategory = categories.find(
-              (cat) => cat._id === e.target.value
-            );
-            setCategoryId(selectedCategory._id);
-            setCategoryName(selectedCategory.name);
-          }}
-        >
-          <option value="" disabled>
-            Select category
-          </option>
-          {categories.map((cat, index) => (
-            <option key={index} value={cat._id}>
-              {cat.name}
+      {categories.length > 0 ? (
+        <div className="form-group">
+          <label>Category</label>
+          <select
+            className="form-control"
+            value={categoryId}
+            onChange={(e) => {
+              const selectedCategory = categories.find(
+                (cat) => cat._id === e.target.value
+              );
+              setCategoryId(selectedCategory._id);
+              setCategoryName(selectedCategory.name);
+            }}
+          >
+            <option value="" disabled>
+              Select category
             </option>
-          ))}
-        </select>
-      </div>
+            {categories.map((cat, index) => (
+              <option key={index} value={cat._id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : (
+        <div className="error-message">
+          Please create atleast one category for Blog
+        </div>
+      )}
 
       <div className="form-group">
         <label>Status</label>
@@ -220,7 +225,7 @@ const BlogForm: React.FC<{
           accept="image/*"
           onChange={handleImageChange}
         />
-      
+
       </div>
       <div className="form-group">
         <label>YouTube Video URL</label>

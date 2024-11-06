@@ -1,7 +1,7 @@
 import axios from "axios";
 // Define the API URL
 const API_URL =
-  "https://oglitz-backend-node.onrender.com/admin/nautika/dashboard";
+  "https://cms-backend-ftz7.onrender.com/admin/nautika/dashboard";
 
 // Function to fetch dashboard info
 export const fetchDashboardInfo = async () => {

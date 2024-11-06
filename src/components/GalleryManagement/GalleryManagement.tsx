@@ -6,13 +6,13 @@ import { useDispatch } from "react-redux";
 
 // Define the base API URLs for the gallery
 const api = axios.create({
-    baseURL: "https://oglitz-backend-node.onrender.com/api/nautika/galleries",
+    baseURL: "https://cms-backend-ftz7.onrender.com/api/nautika/galleries",
 });
 const api2 = axios.create({
-    baseURL: "https://oglitz-backend-node.onrender.com/admin/nautika/galleries",
+    baseURL: "https://cms-backend-ftz7.onrender.com/admin/nautika/galleries",
 });
 const uploadApi = axios.create({
-    baseURL: "https://oglitz-backend-node.onrender.com/admin/intro",
+    baseURL: "https://cms-backend-ftz7.onrender.com/admin/intro",
 });
 
 const GalleryManagement = () => {
@@ -58,7 +58,7 @@ const GalleryManagement = () => {
                 },
             });
 
-            return `https://oglitz-backend-node.onrender.com${response.data.fileUrl}`;
+            return `https://cms-backend-ftz7.onrender.com${response.data.fileUrl}`;
         } catch (error) {
             console.error("Error uploading image:", error);
             throw error;
