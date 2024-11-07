@@ -10,7 +10,7 @@ import { addNotification } from "../../store/actions/notifications.action";
 import { useDispatch } from "react-redux";
 
 const api = axios.create({
-  baseURL: "https://cms-backend-ftz7.onrender.com/admin/nautika", // Base API URL
+  baseURL: "http://134.209.156.80:5001/admin/nautika", // Base API URL
 });
 
 const BlogManagement: React.FC = () => {

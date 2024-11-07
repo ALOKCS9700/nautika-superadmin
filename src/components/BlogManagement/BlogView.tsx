@@ -12,7 +12,7 @@ const BlogView: React.FC = () => {
         // Fetch the blog by id from the API
         async function fetchBlog() {
             try {
-                const response = await axios.get(`https://cms-backend-ftz7.onrender.com/admin/nautika/blogs/${blogId}`);
+                const response = await axios.get(`http://134.209.156.80:5001/admin/nautika/blogs/${blogId}`);
                 setBlog(response.data);
             } catch (error) {
                 console.error("Error fetching blog:", error);
@@ -25,7 +25,7 @@ const BlogView: React.FC = () => {
         if (blog) {
             try {
                 const updatedBlog = { ...blog, status: "Published" };
-                await axios.put(`https://cms-backend-ftz7.onrender.com/admin/nautika/blogs/${blog._id}`, updatedBlog);
+                await axios.put(`http://134.209.156.80:5001/admin/nautika/blogs/${blog._id}`, updatedBlog);
                 setBlog(updatedBlog); // Update state to reflect changes
             } catch (error) {
                 console.error("Error publishing blog:", error);

@@ -10,8 +10,8 @@ import {
 export const loginApiCall = (email: string, password: string) => {
   return async (dispatch: Dispatch) => {
     try {
-     const response = await axios.post("https://cms-backend-ftz7.onrender.com/admin/login", {
-      // const response = await axios.post("https://cms-backend-ftz7.onrender.com/admin/login", {
+     const response = await axios.post("http://134.209.156.80:5001/admin/login", {
+      // const response = await axios.post("http://134.209.156.80:5001/admin/login", {
         email,
         password,
       });

@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 // Set up axios with baseURL
 const api = axios.create({
-    baseURL: "https://cms-backend-ftz7.onrender.com/admin/nautika",
+    baseURL: "http://134.209.156.80:5001/admin/nautika",
 });
 
 // Utility function to compress image
@@ -121,7 +121,7 @@ const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 // Upload compressed image
                 const formData = new FormData();
                 formData.append("file", file); // Append the original file
-                const apiURL = "https://cms-backend-ftz7.onrender.com/admin/intro/upload-image"
+                const apiURL = "http://134.209.156.80:5001/admin/intro/upload-image"
                 const response = await api.post(apiURL, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
@@ -129,7 +129,7 @@ const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 });
 
                 // Set the uploaded image URL
-                setNewCategory({ ...newCategory, image: `https://cms-backend-ftz7.onrender.com${response.data.fileUrl}` });
+                setNewCategory({ ...newCategory, image: `http://134.209.156.80:5001${response.data.fileUrl}` });
             } catch (error) {
                 console.error("Error uploading image", error);
             }

@@ -65,7 +65,7 @@ const BlogForm: React.FC<{
   useEffect(() => {
     async function fetchCategories() {
       const response = await axios.get(
-        "https://cms-backend-ftz7.onrender.com/admin/nautika/categories"
+        "http://134.209.156.80:5001/admin/nautika/categories"
       );
       setCategories(response.data);
     }
@@ -88,7 +88,7 @@ const BlogForm: React.FC<{
 
     try {
       const response = await axios.post(
-        "https://cms-backend-ftz7.onrender.com/admin/intro/upload-image",
+        "http://134.209.156.80:5001/admin/intro/upload-image",
         formData,
         {
           headers: {
@@ -97,7 +97,7 @@ const BlogForm: React.FC<{
         }
       );
 
-      const imageUrl = `https://cms-backend-ftz7.onrender.com${response.data.fileUrl}`;
+      const imageUrl = `http://134.209.156.80:5001${response.data.fileUrl}`;
       return imageUrl;
     } catch (error) {
       console.error("Error uploading image:", error);

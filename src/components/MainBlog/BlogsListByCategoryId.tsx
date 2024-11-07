@@ -15,7 +15,7 @@ const BlogsListByCategoryId = () => {
   useEffect(() => {
     const fetchBlogsByCategory = async () => {
       try {
-        const response = await axios.get(`https://cms-backend-ftz7.onrender.com/api/nautika/blogs/category/${id}`);
+        const response = await axios.get(`http://134.209.156.80:5001/api/nautika/blogs/category/${id}`);
         const blogsWithFormattedDate = response.data.map((blog: any) => ({
           ...blog,
           formattedDate: formatDate(blog.createdAt),
