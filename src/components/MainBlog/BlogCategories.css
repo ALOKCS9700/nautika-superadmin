@@ -1,0 +1,117 @@
+/* Container styling */
+.blog-categories-container {
+  padding: 20px;
+  font-family: Nunito, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Back button */
+.blog-categories-back {
+  margin-bottom: 20px;
+}
+
+.back-link {
+  text-decoration: none;
+  font-size: 16px;
+  color: #012367;
+  display: flex;
+  align-items: center;
+}
+
+.back-link i {
+  margin-right: 8px;
+}
+
+.back-link:hover {
+  color: #09d3f4;
+  text-decoration: none;
+}
+
+/* Header styling */
+.blog-categories-header {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 40px;
+  color: #012367;
+  text-align: center;
+}
+
+/* Grid layout */
+.blog-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Category card */
+.blog-categories-card {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  position: relative; /* Make the label appear over the image */
+}
+
+.blog-categories-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.blog-categories-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
+  min-width: "350px";
+}
+
+/* Blog count label */
+.blog-count-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #09d3f4; /* Your brand color */
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 12px;
+  font-weight: bold;
+  z-index: 1;
+}
+
+/* Content area */
+.blog-categories-card-content {
+  padding: 20px;
+  text-align: start;
+}
+
+.blog-categories-title {
+  font-size: 22px;
+  color: #012367;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.blog-categories-description {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.blog-categories-headerWithShare {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
