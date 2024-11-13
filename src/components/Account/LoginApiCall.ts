@@ -10,11 +10,24 @@ import {
 export const loginApiCall = (email: string, password: string) => {
   return async (dispatch: Dispatch) => {
     try {
-     const response = await axios.post("http://134.209.156.80:5001/admin/login", {
-      // const response = await axios.post("http://134.209.156.80:5001/admin/login", {
-        email,
-        password,
-      });
+     const response = await axios.post(
+       "http://134.209.156.80:5001/admin/login",
+       {
+         email,
+         password,
+       },
+       {
+         headers: {
+           "Content-Type": "application/json",
+         },
+       }
+     );
+
+    //  const response = await axios.post("http://134.209.156.80:5001/admin/login", {
+    //   // const response = await axios.post("http://134.209.156.80:5001/admin/login", {
+    //     email,
+    //     password,
+    //   });
       if (response.data.status) {
         // Dispatch success action with the data
         dispatch(
