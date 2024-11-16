@@ -60,7 +60,8 @@ const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     const fetchCategories = async () => {
         try {
             const response = await api.get("/categories");
-            setCategories(response.data);
+            console.log("responseresponseresponse",response)
+            setCategories(response.data.categories);
         } catch (error) {
             console.error("Error fetching categories:", error);
         }
