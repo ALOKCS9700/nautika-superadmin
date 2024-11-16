@@ -67,7 +67,7 @@ const BlogForm: React.FC<{
       const response = await axios.get(
         "http://134.209.156.80:5001/admin/nautika/categories"
       );
-      setCategories(response.data);
+      setCategories(response.data.categories);
     }
     fetchCategories();
   }, []);
