@@ -72,9 +72,9 @@ const CategoryManagement: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             if (editCategory) {
                 // Update existing category
                 await api.put(`/categories/${editCategory._id}`, {
-                    categoryName: newCategory.name,
-                    categoryDescription: newCategory.description,
-                    categoryImage: newCategory.image,
+                    name: newCategory.name,
+                    description: newCategory.description,
+                    categimageoryImage: newCategory.image,
                 });
             } else {
                 // Create new category
