@@ -143,7 +143,10 @@ const BlogForm: React.FC<{
 
   return (
     <div>
+      <div className="blogAddModalWithBack">
+      <i  onClick={onClose} className="fas fa-arrow-left"></i>
       <h3>{blog ? "Edit Blog" : "Add Blog"}</h3>
+      </div>
 
       <div className="form-group">
         <label>Title</label>
