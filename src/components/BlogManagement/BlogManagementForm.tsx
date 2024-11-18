@@ -34,7 +34,38 @@ const BlogForm: React.FC<{
   const [metaTitle, setmetaTitle] = useState(blog ? blog.metaTitle : "" as any);
   const [metaDescription, setmetaDescription] = useState(blog ? blog.metaDescription : "" as any);
   const [metaKeywords, setmetaKeywords] = useState(blog ? blog.metaKeywords : "" as any);
-  const quillRef = useRef<ReactQuill | null>(null);
+  const quillRef :any= useRef<ReactQuill | null>(null);
+  
+
+  // Custom image handler
+  const imageHandler = () => {
+    const input: any = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+
+    input.click();
+
+    input.onchange = () => {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const imgAlt = prompt('Enter alt text for the image');
+        const imageUrl = reader.result;
+        
+        // Access the Quill editor instance using the ref
+        const quill = quillRef.current.getEditor();
+        if (quill) {
+          const range:any = quill.getSelection();
+          const image = `<img src="${imageUrl}" alt="${imgAlt}" />`;
+          // Insert image with alt text
+          quill.clipboard.dangerouslyPasteHTML(range.index, image);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    };
+  };
 
   const QuillModules = {
     toolbar: [
@@ -55,6 +86,7 @@ const BlogForm: React.FC<{
       ["bold", "italic", "underline", "strike", "blockquote"],
       [{ list: "ordered" }, { list: "bullet" }],
       ["link", "image"],
+      // ["link",{ 'image': imageHandler }],
       [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
     ],
 
@@ -105,6 +137,7 @@ const BlogForm: React.FC<{
     }
   };
 
+  
 
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,6 +193,16 @@ const BlogForm: React.FC<{
       </div>
 
       <div className="form-group">
+        <label>Banner Image</label>
+        <input
+          type="file"
+          className="form-control"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+      </div>
+
+      {/* <div className="form-group">
         <label>Content</label>
         <ReactQuill
           ref={quillRef}
@@ -169,11 +212,11 @@ const BlogForm: React.FC<{
           formats={formats}
           placeholder="write here...."
         />
-      </div>
+      </div> */}
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <label>Estimated Read Time: {readTime ? `${readTime} min` : "Calculating..."}</label>
-      </div>
+      </div> */}
       {categories.length > 0 ? (
         <div className="form-group">
           <label>Category</label>
@@ -204,7 +247,7 @@ const BlogForm: React.FC<{
         </div>
       )}
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <label>Status</label>
         <div className="form-check">
           <input
@@ -218,9 +261,9 @@ const BlogForm: React.FC<{
             {status ? "Published" : "Draft"}
           </label>
         </div>
-      </div>
+      </div> */}
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <label>Banner Image</label>
         <input
           type="file"
@@ -229,7 +272,8 @@ const BlogForm: React.FC<{
           onChange={handleImageChange}
         />
 
-      </div>
+      </div> */}
+
       <div className="form-group">
         <label>YouTube Video URL</label>
         <input
@@ -271,10 +315,43 @@ const BlogForm: React.FC<{
         />
       </div>
 
+      <div className="form-group blogAddReactQuill">
+        <label>Content</label>
+        <ReactQuill
+          ref={quillRef}
+          value={content}
+          onChange={setContent}
+          modules={QuillModules}
+          formats={formats}
+          placeholder="write here...."
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Estimated Read Time: {readTime ? `${readTime} min` : "Calculating..."}</label>
+      </div>
+
+      <div className="form-group BlogStatusFlex">
+        <label>Status</label>
+        <div className="form-check">
+          <input
+            type="checkbox"
+            className="form-check-input"
+            checked={status}
+            name="status"
+            onChange={() => setStatus(!status)}
+            id="status"
+          />
+          <label htmlFor="status" className="form-check-label">
+            {status ? "Published" : "Draft"}
+          </label>
+        </div>
+      </div>
+
       <h4>FAQ Section</h4>
       {faq.length > 0 ? (
         faq.map((faqItem, index) => (
-          <div key={index} className="form-group">
+          <div key={index} className="form-group FAQblogAddReactQuill">
             <input
               type="text"
               className="form-control faqQuestionStyle"
