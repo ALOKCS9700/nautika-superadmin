@@ -15,6 +15,7 @@ const BlogForm: React.FC<{
   onClose: () => void;
 }> = ({ blog, onSave, onClose }) => {
   const [title, setTitle] = useState(blog ? blog.title : "");
+  const [slug, setSlug] = useState(blog ? blog.slug : "");
   const [content, setContent] = useState(blog ? blog.content : "");
   const [faq, setFaq] = useState<Array<{ question: string; answer: string }>>(
     blog && blog.faqs ? blog.faqs : []
@@ -34,8 +35,8 @@ const BlogForm: React.FC<{
   const [metaTitle, setmetaTitle] = useState(blog ? blog.metaTitle : "" as any);
   const [metaDescription, setmetaDescription] = useState(blog ? blog.metaDescription : "" as any);
   const [metaKeywords, setmetaKeywords] = useState(blog ? blog.metaKeywords : "" as any);
-  const quillRef :any= useRef<ReactQuill | null>(null);
-  
+  const quillRef: any = useRef<ReactQuill | null>(null);
+
 
   // Custom image handler
   const imageHandler = () => {
@@ -52,11 +53,11 @@ const BlogForm: React.FC<{
       reader.onload = () => {
         const imgAlt = prompt('Enter alt text for the image');
         const imageUrl = reader.result;
-        
+
         // Access the Quill editor instance using the ref
         const quill = quillRef.current.getEditor();
         if (quill) {
-          const range:any = quill.getSelection();
+          const range: any = quill.getSelection();
           const image = `<img src="${imageUrl}" alt="${imgAlt}" />`;
           // Insert image with alt text
           quill.clipboard.dangerouslyPasteHTML(range.index, image);
@@ -137,7 +138,7 @@ const BlogForm: React.FC<{
     }
   };
 
-  
+
 
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,6 +167,7 @@ const BlogForm: React.FC<{
       metaTitle,
       metaDescription,
       metaKeywords,
+      slug,
     };
     onSave(newBlog);
   };
@@ -177,8 +179,8 @@ const BlogForm: React.FC<{
   return (
     <div>
       <div className="blogAddModalWithBack">
-      <i  onClick={onClose} className="fas fa-arrow-left"></i>
-      <h3>{blog ? "Edit Blog" : "Add Blog"}</h3>
+        <i onClick={onClose} className="fas fa-arrow-left"></i>
+        <h3>{blog ? "Edit Blog" : "Add Blog"}</h3>
       </div>
 
       <div className="form-group">
@@ -312,6 +314,17 @@ const BlogForm: React.FC<{
           value={metaKeywords}
           onChange={(e: any) => setmetaKeywords(e.target.value)}
           placeholder="Enter Meta Keywords"
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Slug</label>
+        <input
+          type="text"
+          className="form-control"
+          value={slug}
+          onChange={(e: any) => setSlug(e.target.value)}
+          placeholder="Enter Slug"
         />
       </div>
 
