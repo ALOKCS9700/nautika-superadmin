@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import MetaInfo from "./MetaInfo";
 
 const BlogView: React.FC = () => {
     const { blogId } = useParams<{ blogId: string }>();
@@ -126,6 +127,8 @@ const BlogView: React.FC = () => {
                 ) : (
                     <p>No FAQs available.</p> /* Fallback if FAQs are missing */
                 )}
+
+                <MetaInfo data={blog} />
 
                 {/* Publish Button */}
                 <div className="blog-actions">
