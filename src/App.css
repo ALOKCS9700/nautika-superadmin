@@ -57,7 +57,7 @@ body {
   vertical-align: bottom;
 }
 
-.unique-table tbody+tbody {
+.unique-table tbody + tbody {
   border-top: 2px solid #dee2e6;
 }
 
@@ -210,7 +210,6 @@ body {
   cursor: pointer;
 }
 
-
 .popup-content {
   margin-top: 40px;
   padding-top: 10px;
@@ -292,7 +291,7 @@ body {
   position: fixed;
   top: 80px;
   right: 30px;
-  z-index: 100 !important;
+  z-index: 999999 !important;
 }
 
 .toast {
@@ -472,6 +471,22 @@ li a {
   margin-bottom: 15px;
 }
 
+.form-check-inputTop {
+  margin-top: 0.4rem !important;
+  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.BlogTopRadioStyleBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.BlogTopRadioStyle {
+  margin: 0 !important;
+}
+
 .faq-question {
   font-weight: bold;
   margin-bottom: 5px;
@@ -514,10 +529,49 @@ li a {
   margin-top: 5px;
 }
 
-
 .error-message {
   width: 100%;
   margin-top: 0.25rem;
   font-size: 80%;
   color: #e74a3b;
+}
+
+/* Style for all radio buttons */
+input[type="radio"] {
+  -webkit-appearance: none; /* Removes default appearance for WebKit browsers */
+  appearance: none; /* Removes default appearance */
+  border: 2px solid gray; /* Default border */
+  border-radius: 50%; /* Makes it circular */
+  width: 10px; /* Default size for unselected */
+  height: 10px; /* Default size for unselected */
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Smooth transition for size and colors */
+  margin-top: 9px !important;
+}
+
+/* Style for non-selected radio buttons */
+input[type="radio"]:not(:checked) {
+  width: 10px;
+  height: 10px;
+  border-color: gray;
+  width: 10;
+  height: 10px;
+  background-color: gray;
+  border-color: gray;
+  box-shadow: 0 0 0 0.25rem rgb(156 158 156 / 25%);
+}
+
+/* Style for checked radio buttons */
+input[type="radio"]:checked {
+  width: 10; /* Larger size for selected */
+  height: 10px;
+  background-color: green;
+  border-color: green;
+  box-shadow: 0 0 0 0.25rem rgba(0, 128, 0, 0.25); /* Optional shadow for focus */
+}
+
+/* Optional: Add hover effect for all radio buttons */
+input[type="radio"]:hover {
+  border-color: darkgreen !important;
 }

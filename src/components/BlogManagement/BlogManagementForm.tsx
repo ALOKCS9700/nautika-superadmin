@@ -1,7 +1,9 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Dispatch, useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { useDispatch } from "react-redux";
+import { addNotification } from "../../store/actions/notifications.action";
 
 const formats = [
   "header", "height", "bold", "italic", "underline", "strike",
@@ -16,6 +18,8 @@ const BlogForm: React.FC<{
 }> = ({ blog, onSave, onClose }) => {
   const [title, setTitle] = useState(blog ? blog.title : "");
   const [slug, setSlug] = useState(blog ? blog.slug : "");
+  const [shortDescription, setShortDescription] = useState(blog ? blog.shortDescription : "");
+  const [tags, setTags] = useState(blog ? blog.tags.toString() : "");
   const [content, setContent] = useState(blog ? blog.content : "");
   const [faq, setFaq] = useState<Array<{ question: string; answer: string }>>(
     blog && blog.faqs ? blog.faqs : []
@@ -28,6 +32,7 @@ const BlogForm: React.FC<{
     blog ? blog.categoryName : ""
   );
   const [status, setStatus] = useState(blog ? blog.status === "Published" : false);
+  const [selectedOption, setSelectedOption] = useState("Island Pages"); // Track the selected option
   const [readTime, setReadTime] = useState<number | null>(null);
   const [createdAt] = useState(blog ? blog.createdAt : new Date().toISOString());
   const [categories, setCategories] = useState<any[]>([]);
@@ -36,7 +41,7 @@ const BlogForm: React.FC<{
   const [metaDescription, setmetaDescription] = useState(blog ? blog.metaDescription : "" as any);
   const [metaKeywords, setmetaKeywords] = useState(blog ? blog.metaKeywords : "" as any);
   const quillRef: any = useRef<ReactQuill | null>(null);
-
+  const dispatch: Dispatch<any> = useDispatch();
 
   // Custom image handler
   const imageHandler = () => {
@@ -106,7 +111,9 @@ const BlogForm: React.FC<{
   }, []);
 
   useEffect(() => {
-    calculateReadTime(content);
+    if (content !== "") {
+      calculateReadTime(content);
+    }
   }, [content]);
 
   const calculateReadTime = (text: string) => {
@@ -152,6 +159,8 @@ const BlogForm: React.FC<{
   };
 
   const handleSave = () => {
+    const tagsArray = tags.split(",").map((tag: any) => tag.trim());
+
     const newBlog = {
       _id: blog ? blog._id : undefined,
       title,
@@ -168,8 +177,14 @@ const BlogForm: React.FC<{
       metaDescription,
       metaKeywords,
       slug,
+      shortDescription,
+      tags: tagsArray
     };
-    onSave(newBlog);
+    if (tags !== "" || shortDescription !== "") {
+      onSave(newBlog);
+    } else {
+      dispatch(addNotification("Required Fields", `All Fields are required`));
+    }
   };
 
   const handleAddFaq = () => {
@@ -182,6 +197,55 @@ const BlogForm: React.FC<{
         <i onClick={onClose} className="fas fa-arrow-left"></i>
         <h3>{blog ? "Edit Blog" : "Add Blog"}</h3>
       </div>
+
+
+      {/* <div className="BlogTopRadioStyleBox">
+        <div className="form-group BlogStatusFlex BlogTopRadioStyle">
+          <div className="form-check">
+            <input
+              type="radio"
+              className="form-check-input form-check-inputTop"
+              checked={selectedOption === "Island Pages"}
+              name="blogOption"
+              onChange={() => setSelectedOption("Island Pages")}
+              id="islandPages"
+            />
+            <label htmlFor="islandPages" className="form-check-label">
+              Island Pages
+            </label>
+          </div>
+        </div>
+        <div className="form-group BlogStatusFlex BlogTopRadioStyle">
+          <div className="form-check">
+            <input
+              type="radio"
+              className="form-check-input form-check-inputTop"
+              checked={selectedOption === "Activity Pages"}
+              name="blogOption"
+              onChange={() => setSelectedOption("Activity Pages")}
+              id="activityPages"
+            />
+            <label htmlFor="activityPages" className="form-check-label">
+              Activity Pages
+            </label>
+          </div>
+        </div>
+        <div className="form-group BlogStatusFlex BlogTopRadioStyle">
+          <div className="form-check">
+            <input
+              type="radio"
+              className="form-check-input form-check-inputTop"
+              checked={selectedOption === "Regular Blog Pages"}
+              name="blogOption"
+              onChange={() => setSelectedOption("Regular Blog Pages")}
+              id="regularBlogPages"
+            />
+            <label htmlFor="regularBlogPages" className="form-check-label">
+              Regular Blog Pages
+            </label>
+          </div>
+        </div>
+      </div> */}
 
       <div className="form-group">
         <label>Title</label>
@@ -325,6 +389,26 @@ const BlogForm: React.FC<{
           value={slug}
           onChange={(e: any) => setSlug(e.target.value)}
           placeholder="Enter Slug"
+        />
+      </div>
+      <div className="form-group">
+        <label>Short Description</label>
+        <textarea
+          className="form-control"
+          value={shortDescription}
+          onChange={(e: any) => setShortDescription(e.target.value)}
+          placeholder="Enter Short Description"
+          rows={4} // Adjust rows for height as needed
+        />
+      </div>
+      <div className="form-group">
+        <label>Tags</label>
+        <input
+          type="text"
+          className="form-control"
+          value={tags}
+          onChange={(e: any) => setTags(e.target.value)}
+          placeholder="Enter tags"
         />
       </div>
 
