@@ -48,10 +48,10 @@ const IslandsManagement: React.FC = () => {
     try {
       if (selectedBlog && selectedBlog._id) {
         // Update existing blog
-        await api.put(`/blogs/${selectedBlog._id}`, newBlog);
+        await api.put(`/islands/${selectedBlog._id}`, newBlog);
       } else {
         // Create new blog
-        await api.post("/blogs", newBlog);
+        await api.post("/islands", newBlog);
       }
       fetchBlogs(); // Refresh the list after save
       setPopup(false);

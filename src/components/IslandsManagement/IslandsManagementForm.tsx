@@ -19,29 +19,36 @@ const IslandsManagementForm: React.FC<{
   const [title, setTitle] = useState(blog ? blog.title : "");
   const [slug, setSlug] = useState(blog ? blog.slug : "");
   const [shortDescription, setShortDescription] = useState(blog ? blog.extra_content : "");
+  console.log("blogblogblogblogblog", blog)
   const [AboutDescription, setAboutDescription] = useState(blog ? blog.about : "");
-  const [tags, setTags] = useState(blog ? blog.tags.toString() : "");
-  const [thingstodo, setThingstodo] = useState(blog ? blog.things_to_do.toString() : "");
-  const [content, setContent] = useState(blog ? blog.content : "");
-  const [faq, setFaq] = useState<Array<{ question: string; answer: string }>>(
-    blog && blog.faqs ? blog.faqs : []
+  const [tags, setTags] = useState(blog ? blog.tags : "");
+  const [thingstodo, setThingstodo] = useState(blog && Array.isArray(blog.things_to_do) ? blog.things_to_do.toString() : "");
+
+  // const [content, setContent] = useState(blog ? blog.content : "");
+  const [bestTime, setBestTime] = useState(blog ? blog.best_time : "");
+  const [faq, setFaq] = useState<Array<{ name: any; content: any, image?: any, _id: any }>>(
+    blog && blog.popular_beaches ? blog.popular_beaches : []
   );
   const [imageUrl, setImageUrl] = useState<string | null>(
-    blog ? blog.image : null
+    blog ? blog.cover_image : null
   );
+  const [images, setImages] = useState<string | null>(
+    blog ? blog.images : null
+  );
+  const [imageFiles, setImageFiles] = useState<File[]>(blog ? blog.images : []);
   const [categoryId, setCategoryId] = useState(blog ? blog.categoryId : "");
   const [categoryName, setCategoryName] = useState(
     blog ? blog.categoryName : ""
   );
   const [status, setStatus] = useState(blog ? blog.status === "Published" : false);
   const [selectedOption, setSelectedOption] = useState("Island Pages"); // Track the selected option
-  const [readTime, setReadTime] = useState<number | null>(null);
+  // const [readTime, setReadTime] = useState<number | null>(null);
   const [createdAt] = useState(blog ? blog.createdAt : new Date().toISOString());
   const [categories, setCategories] = useState<any[]>([]);
   const [YoutubeVideoURl, setYoutubeVideoURl] = useState(blog ? blog.videoUrl : "" as any);
-  const [metaTitle, setmetaTitle] = useState(blog ? blog.metaTitle : "" as any);
-  const [metaDescription, setmetaDescription] = useState(blog ? blog.metaDescription : "" as any);
-  const [metaKeywords, setmetaKeywords] = useState(blog ? blog.metaKeywords : "" as any);
+  const [metaTitle, setmetaTitle] = useState(blog ? blog.meta.title : "" as any);
+  const [metaDescription, setmetaDescription] = useState(blog ? blog.meta.description : "" as any);
+  // const [metaKeywords, setmetaKeywords] = useState(blog ? blog.metaKeywords : "" as any);
   const quillRef: any = useRef<ReactQuill | null>(null);
   const dispatch: Dispatch<any> = useDispatch();
 
@@ -112,17 +119,17 @@ const IslandsManagementForm: React.FC<{
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    if (content !== "") {
-      calculateReadTime(content);
-    }
-  }, [content]);
+  // useEffect(() => {
+  //   if (content !== "") {
+  //     calculateReadTime(content);
+  //   }
+  // }, [content]);
 
-  const calculateReadTime = (text: string) => {
-    const words = text.trim().split(/\s+/).length;
-    const estimatedTime = Math.ceil(words / 200);
-    setReadTime(estimatedTime);
-  };
+  // const calculateReadTime = (text: string) => {
+  //   const words = text.trim().split(/\s+/).length;
+  //   const estimatedTime = Math.ceil(words / 200);
+  //   setReadTime(estimatedTime);
+  // };
 
   const uploadImage = async (file: File): Promise<string> => {
     const formData = new FormData();
@@ -160,29 +167,42 @@ const IslandsManagementForm: React.FC<{
     }
   };
 
-  const handleSave = () => {
-    const tagsArray = tags.split(",").map((tag: any) => tag.trim());
+  const handleImagePopularBeaches = async (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (file) {
+        const imageUrl = await uploadImage(file); // Upload image and get URL
+        const newFaq = [...faq];
+        newFaq[index].image = imageUrl; // Update image URL in FAQ item
+        setFaq(newFaq); // Update FAQ state
+      }
+    }
+  };
 
+  const handleSave = async () => {
+    const tagsArray = tags.split(",").map((tag: any) => tag.trim());
+    const things_to_doArry = thingstodo.split(",").map((tag: any) => tag.trim());
     const newBlog = {
       _id: blog ? blog._id : undefined,
       title,
-      content,
-      faqs: faq,
-      image: imageUrl,
-      categoryId,
-      categoryName,
-      status: status ? "Published" : "Draft",
-      readTime,
+      about: AboutDescription,
+      popular_beaches: faq,
+      cover_image: imageUrl,
+      best_time: bestTime,
+      images: imageFiles,
       createdAt,
-      videoUrl: YoutubeVideoURl,
-      metaTitle,
-      metaDescription,
-      metaKeywords,
+      meta: {
+        title: metaTitle,
+        description: metaDescription
+      },
+      extra_content: shortDescription,
+      tags: tags,
+      // tags: tagsArray,
+      things_to_do: things_to_doArry,
       slug,
-      shortDescription,
-      tags: tagsArray
     };
-    if (tags !== "" || shortDescription !== "") {
+    console.log("newBlognewBlognewBlognewBlog", newBlog)
+    if (tags !== "" || shortDescription !== "" || imageFiles.length > 0) {
       onSave(newBlog);
     } else {
       dispatch(addNotification("Required Fields", `All Fields are required`));
@@ -190,7 +210,16 @@ const IslandsManagementForm: React.FC<{
   };
 
   const handleAddFaq = () => {
-    setFaq([...faq, { question: "", answer: "" }]);
+    setFaq([...faq, { name: "", content: "", image: "", _id: "" }]);
+  };
+
+  // Handle file selection and upload multiple files
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files); // Convert FileList to an array
+      const uploadedImages = await Promise.all(filesArray.map(uploadImage)); // Upload each file
+      setImageFiles((prevImages: any) => [...prevImages, ...uploadedImages]); // Append new images to the state
+    }
   };
 
   return (
@@ -220,14 +249,32 @@ const IslandsManagementForm: React.FC<{
           onChange={handleImageChange}
         />
       </div>
+      <div className="muliImageStyleBox">
+        {imageUrl && (
+          <img src={imageUrl} alt="Cover Image" width={50} style={{ marginRight: '5px' }} />
+        )}
+      </div>
+
       <div className="form-group">
         <label>Images</label>
         <input
           type="file"
           className="form-control"
           accept="image/*"
-          onChange={handleImageChange}
+          multiple
+          onChange={handleFileChange}
         />
+      </div>
+      <div className="muliImageStyleBox">
+        {imageFiles.map((img: any, index: any) => (
+          <img
+            key={index}
+            src={img}
+            alt={`Images ${index}`}
+            width={50}
+            style={{ marginRight: "5px" }}
+          />
+        ))}
       </div>
 
       <div className="form-group">
@@ -260,6 +307,16 @@ const IslandsManagementForm: React.FC<{
           placeholder="Enter Meta Keywords"
         />
       </div> */}
+      <div className="form-group">
+        <label>Best Time</label>
+        <input
+          type="text"
+          className="form-control"
+          value={bestTime}
+          onChange={(e: any) => setBestTime(e.target.value)}
+          placeholder="Enter Best Time"
+        />
+      </div>
 
       <div className="form-group">
         <label>Things To Do</label>
@@ -294,6 +351,17 @@ const IslandsManagementForm: React.FC<{
       </div>
 
       <div className="form-group">
+        <label>Slug</label>
+        <input
+          type="text"
+          className="form-control"
+          value={slug}
+          onChange={(e: any) => setSlug(e.target.value)}
+          placeholder="Enter Slug"
+        />
+      </div>
+
+      <div className="form-group">
         <label>About</label>
         <textarea
           className="form-control"
@@ -313,10 +381,10 @@ const IslandsManagementForm: React.FC<{
               <input
                 type="text"
                 className="form-control"
-                value={faqItem.question}
+                value={faqItem.name}
                 onChange={(e: any) => {
                   const newFaq = [...faq];
-                  newFaq[index].question = e.target.value;
+                  newFaq[index].name = e.target.value;
                   setFaq(newFaq);
                 }}
                 placeholder="Enter Name"
@@ -326,10 +394,10 @@ const IslandsManagementForm: React.FC<{
               <label>Content</label>
               <textarea
                 className="form-control"
-                value={faqItem.answer}
-                onChange={(value: any) => {
+                value={faqItem.content}
+                onChange={(e: any) => {
                   const newFaq = [...faq];
-                  newFaq[index].answer = value;
+                  newFaq[index].content = e.target.value;
                   setFaq(newFaq);
                 }}
                 placeholder="Enter Content"
@@ -343,8 +411,13 @@ const IslandsManagementForm: React.FC<{
                 type="file"
                 className="form-control"
                 accept="image/*"
-                onChange={handleImageChange}
+                onChange={(e) => handleImagePopularBeaches(e, index)} // Pass index to handleImageChange
               />
+            </div>
+            <div className="muliImageStyleBox">
+              {faqItem.image && (
+                <img src={faqItem.image} alt="Uploaded" width={50} style={{ marginRight: '5px' }} />
+              )}
             </div>
 
           </div>

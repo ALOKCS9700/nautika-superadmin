@@ -16,13 +16,14 @@ const TestimonialsManagement = () => {
     const [selectedTestimonial, setSelectedTestimonial] = useState<any | null>(null);
     const [formVisible, setFormVisible] = useState(false);
     const [formData, setFormData] = useState({
-        type: "text",
+        type: "video",
         coverImage: "",
         text: "",
         name: "",
         video_url: "",
         dateCreated: "",
     });
+    const [selectedOption, setSelectedOption] = useState("video");
 
     useEffect(() => {
         fetchTestimonials();
@@ -81,7 +82,7 @@ const TestimonialsManagement = () => {
     const handleAddNew = () => {
         setFormVisible(true);
         setFormData({
-            type: "text",
+            type: "video",
             coverImage: "",
             text: "",
             name: "",
@@ -155,7 +156,56 @@ const TestimonialsManagement = () => {
                         value={formData.name}
                         onChange={handleInputChange}
                     />
-                   
+
+                    <div className="BlogTopRadioStyleBox">
+                        <div className="form-group BlogStatusFlex BlogTopRadioStyle">
+                            <div className="form-check">
+                                <input
+                                    type="radio"
+                                    className="form-check-input form-check-inputTop"
+                                    checked={formData.type === "video"}
+                                    name="blogOption"
+                                    onChange={() => setFormData({ ...formData, type: "video" })}
+                                    id="video"
+                                />
+                                <label htmlFor="video" className="form-check-label">
+                                    Video
+                                </label>
+                            </div>
+                        </div>
+                        <div className="form-group BlogStatusFlex BlogTopRadioStyle">
+                            <div className="form-check">
+                                <input
+                                    type="radio"
+                                    className="form-check-input form-check-inputTop"
+                                    checked={formData.type === "image"}
+                                    name="blogOption"
+                                    onChange={() => setFormData({ ...formData, type: "image" })}
+                                    id="imageCheck"
+                                />
+                                <label htmlFor="imageCheck" className="form-check-label">
+                                    Image
+                                </label>
+                            </div>
+                        </div>
+                        <div className="form-group BlogStatusFlex BlogTopRadioStyle">
+                            <div className="form-check">
+                                <input
+                                    type="radio"
+                                    className="form-check-input form-check-inputTop"
+                                    checked={formData.type === "text"}
+                                    name="blogOption"
+                                    onChange={() => setFormData({ ...formData, type: "text" })}
+                                    id="textCheck"
+                                />
+                                <label htmlFor="textCheck" className="form-check-label">
+                                    Text
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div className="videoandInputVideoURl">
                         <input
                             type="file"
@@ -221,7 +271,15 @@ const TestimonialsManagement = () => {
                             <td>{i + 1}</td>
                             <td>{testimonial.name}</td>
                             {/* <td>{testimonial.type}</td> */}
-                            <td>{testimonial.text}</td>
+                            {/* <td>{testimonial.text}</td> */}
+                            <td>
+                                {
+                                    testimonial.text && testimonial.text.length > 20
+                                        ? testimonial.text.substring(0, 20) + "..."
+                                        : testimonial.text || "No Testimonial Text"
+                                }
+                            </td>
+
                             <td>
                                 <img src={testimonial.coverImage} alt="Cover" className="cover-image" />
                             </td>
