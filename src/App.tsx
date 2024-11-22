@@ -13,6 +13,8 @@ import BlogDetails from "./components/MainBlog/BlogDetails";
 import BlogCategories from "./components/MainBlog/BlogCategories";
 import BlogsListByCategoryId from "./components/MainBlog/BlogsListByCategoryId";
 import ContactForm from "./components/ContactForm";
+import IslandsCategoryManagement from "./components/IslandsManagement/IslandsCategoryManagement";
+import IslandsManagementList from "./components/IslandsManagement/IslandsManagementList";
 
 const App: React.FC = () => {
   const dispatch = useDispatch();

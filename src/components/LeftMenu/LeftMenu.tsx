@@ -48,6 +48,12 @@ const LeftMenu: React.FC = () => {
                     </Link>
                 </li>
                 <li className="nav-item">
+                    <Link className="nav-link" to={`/IslandsManagement`}>
+                        <i className="fas fa-fw fa-warehouse"></i>
+                        <span>Islands Management</span>
+                    </Link>
+                </li>
+                <li className="nav-item">
                     <Link className="nav-link" to={`/TestimonialsManagement`}>
                         <i className="fas fa-fw fa-warehouse"></i>
                         <span>Testimonials Management</span>

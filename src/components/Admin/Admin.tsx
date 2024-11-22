@@ -8,6 +8,7 @@ import BlogManagement from "../BlogManagement/BlogManagement";
 import BlogView from "../BlogManagement/BlogView";
 import TestimonialsManagement from "../TestimonialsManagement/TestimonialsManagement";
 import GalleryManagement from "../GalleryManagement/GalleryManagement";
+import IslandsManagement from "../IslandsManagement/IslandsManagement";
 
 const Admin: React.FC = () => {
 
@@ -21,6 +22,7 @@ const Admin: React.FC = () => {
           <div className="container-fluid">
             <Switch>
               <Route path={`/BlogManagement`}><BlogManagement /></Route>
+              <Route path={`/IslandsManagement`}><IslandsManagement /></Route>
               <Route path={`/TestimonialsManagement`}><TestimonialsManagement /></Route>
               <Route path={`/GalleryManagement`}><GalleryManagement /></Route>
               <Route path="/view-blog/:blogId"><BlogView /></Route>

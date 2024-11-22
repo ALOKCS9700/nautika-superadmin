@@ -1,0 +1,371 @@
+import axios from "axios";
+import React, { Dispatch, useEffect, useRef, useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { useDispatch } from "react-redux";
+import { addNotification } from "../../store/actions/notifications.action";
+
+const formats = [
+  "header", "height", "bold", "italic", "underline", "strike",
+  "blockquote", "list", "color", "bullet", "indent", "link",
+  "image", "align", "size", 'table',
+];
+
+const IslandsManagementForm: React.FC<{
+  blog: any | null;
+  onSave: (blog: any) => void;
+  onClose: () => void;
+}> = ({ blog, onSave, onClose }) => {
+  const [title, setTitle] = useState(blog ? blog.title : "");
+  const [slug, setSlug] = useState(blog ? blog.slug : "");
+  const [shortDescription, setShortDescription] = useState(blog ? blog.extra_content : "");
+  const [AboutDescription, setAboutDescription] = useState(blog ? blog.about : "");
+  const [tags, setTags] = useState(blog ? blog.tags.toString() : "");
+  const [thingstodo, setThingstodo] = useState(blog ? blog.things_to_do.toString() : "");
+  const [content, setContent] = useState(blog ? blog.content : "");
+  const [faq, setFaq] = useState<Array<{ question: string; answer: string }>>(
+    blog && blog.faqs ? blog.faqs : []
+  );
+  const [imageUrl, setImageUrl] = useState<string | null>(
+    blog ? blog.image : null
+  );
+  const [categoryId, setCategoryId] = useState(blog ? blog.categoryId : "");
+  const [categoryName, setCategoryName] = useState(
+    blog ? blog.categoryName : ""
+  );
+  const [status, setStatus] = useState(blog ? blog.status === "Published" : false);
+  const [selectedOption, setSelectedOption] = useState("Island Pages"); // Track the selected option
+  const [readTime, setReadTime] = useState<number | null>(null);
+  const [createdAt] = useState(blog ? blog.createdAt : new Date().toISOString());
+  const [categories, setCategories] = useState<any[]>([]);
+  const [YoutubeVideoURl, setYoutubeVideoURl] = useState(blog ? blog.videoUrl : "" as any);
+  const [metaTitle, setmetaTitle] = useState(blog ? blog.metaTitle : "" as any);
+  const [metaDescription, setmetaDescription] = useState(blog ? blog.metaDescription : "" as any);
+  const [metaKeywords, setmetaKeywords] = useState(blog ? blog.metaKeywords : "" as any);
+  const quillRef: any = useRef<ReactQuill | null>(null);
+  const dispatch: Dispatch<any> = useDispatch();
+
+  // Custom image handler
+  const imageHandler = () => {
+    const input: any = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+
+    input.click();
+
+    input.onchange = () => {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const imgAlt = prompt('Enter alt text for the image');
+        const imageUrl = reader.result;
+
+        // Access the Quill editor instance using the ref
+        const quill = quillRef.current.getEditor();
+        if (quill) {
+          const range: any = quill.getSelection();
+          const image = `<img src="${imageUrl}" alt="${imgAlt}" />`;
+          // Insert image with alt text
+          quill.clipboard.dangerouslyPasteHTML(range.index, image);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    };
+  };
+
+  const QuillModules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ size: ["small", false, "large", "huge"] }],
+      [
+        {
+          color: [
+            "#000000", "#e60000", "#ff9900", "#ffff00", "#008a00", "#0066cc",
+            "#9933ff", "#ffffff", "#facccc", "#ffebcc", "#ffffcc", "#cce8cc",
+            "#cce0f5", "#ebd6ff", "#bbbbbb", "#f06666", "#ffc266", "#ffff66",
+            "#66b966", "#66a3e0", "#c285ff", "#888888", "#a10000", "#b26b00",
+            "#b2b200", "#006100", "#0047b2", "#6b24b2", "#444444", "#5c0000",
+            "#663d00", "#666600", "#003700", "#002966", "#3d1466", 'custom-color'
+          ],
+        },
+      ],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "image"],
+      // ["link",{ 'image': imageHandler }],
+      [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+    ],
+
+  };
+
+
+
+  useEffect(() => {
+    async function fetchCategories() {
+      const response = await axios.get(
+        "http://134.209.156.80:5001/admin/nautika/categories"
+      );
+      setCategories(response.data.categories);
+    }
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    if (content !== "") {
+      calculateReadTime(content);
+    }
+  }, [content]);
+
+  const calculateReadTime = (text: string) => {
+    const words = text.trim().split(/\s+/).length;
+    const estimatedTime = Math.ceil(words / 200);
+    setReadTime(estimatedTime);
+  };
+
+  const uploadImage = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post(
+        "http://134.209.156.80:5001/admin/intro/upload-image",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      const imageUrl = `http://134.209.156.80:5001${response.data.fileUrl}`;
+      return imageUrl;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      return "";
+    }
+  };
+
+
+
+
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const uploadedImageUrl = await uploadImage(file);
+      if (uploadedImageUrl) {
+        setImageUrl(uploadedImageUrl);
+      }
+    }
+  };
+
+  const handleSave = () => {
+    const tagsArray = tags.split(",").map((tag: any) => tag.trim());
+
+    const newBlog = {
+      _id: blog ? blog._id : undefined,
+      title,
+      content,
+      faqs: faq,
+      image: imageUrl,
+      categoryId,
+      categoryName,
+      status: status ? "Published" : "Draft",
+      readTime,
+      createdAt,
+      videoUrl: YoutubeVideoURl,
+      metaTitle,
+      metaDescription,
+      metaKeywords,
+      slug,
+      shortDescription,
+      tags: tagsArray
+    };
+    if (tags !== "" || shortDescription !== "") {
+      onSave(newBlog);
+    } else {
+      dispatch(addNotification("Required Fields", `All Fields are required`));
+    }
+  };
+
+  const handleAddFaq = () => {
+    setFaq([...faq, { question: "", answer: "" }]);
+  };
+
+  return (
+    <div>
+      <div className="blogAddModalWithBack">
+        <i onClick={onClose} className="fas fa-arrow-left"></i>
+        <h3>{blog ? "Edit Islands" : "Add Islands"}</h3>
+      </div>
+
+      <div className="form-group">
+        <label>Title</label>
+        <input
+          type="text"
+          className="form-control"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Enter islands title"
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Cover Image</label>
+        <input
+          type="file"
+          className="form-control"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+      </div>
+      <div className="form-group">
+        <label>Images</label>
+        <input
+          type="file"
+          className="form-control"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Meta Title</label>
+        <input
+          type="text"
+          className="form-control"
+          value={metaTitle}
+          onChange={(e: any) => setmetaTitle(e.target.value)}
+          placeholder="Enter Meta Title"
+        />
+      </div>
+      <div className="form-group">
+        <label>Meta Description</label>
+        <input
+          type="text"
+          className="form-control"
+          value={metaDescription}
+          onChange={(e: any) => setmetaDescription(e.target.value)}
+          placeholder="Enter Meta Description"
+        />
+      </div>
+      {/* <div className="form-group">
+        <label>Meta Keywords</label>
+        <input
+          type="text"
+          className="form-control"
+          value={metaKeywords}
+          onChange={(e: any) => setmetaKeywords(e.target.value)}
+          placeholder="Enter Meta Keywords"
+        />
+      </div> */}
+
+      <div className="form-group">
+        <label>Things To Do</label>
+        <input
+          type="text"
+          className="form-control"
+          value={thingstodo}
+          onChange={(e: any) => setThingstodo(e.target.value)}
+          placeholder="Enter Things To Do"
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Extra Content</label>
+        <textarea
+          className="form-control"
+          value={shortDescription}
+          onChange={(e: any) => setShortDescription(e.target.value)}
+          placeholder="Enter Extra Content"
+          rows={4} // Adjust rows for height as needed
+        />
+      </div>
+      <div className="form-group">
+        <label>Tags</label>
+        <input
+          type="text"
+          className="form-control"
+          value={tags}
+          onChange={(e: any) => setTags(e.target.value)}
+          placeholder="Enter tags"
+        />
+      </div>
+
+      <div className="form-group">
+        <label>About</label>
+        <textarea
+          className="form-control"
+          value={AboutDescription}
+          onChange={(e: any) => setAboutDescription(e.target.value)}
+          placeholder="Enter About"
+          rows={4} // Adjust rows for height as needed
+        />
+      </div>
+
+      <h4>Popular Beaches</h4>
+      {faq.length > 0 ? (
+        faq.map((faqItem, index) => (
+          <div key={index} className="form-group FAQblogAddReactQuill">
+            <div className="form-group">
+              <label>Name</label>
+              <input
+                type="text"
+                className="form-control"
+                value={faqItem.question}
+                onChange={(e: any) => {
+                  const newFaq = [...faq];
+                  newFaq[index].question = e.target.value;
+                  setFaq(newFaq);
+                }}
+                placeholder="Enter Name"
+              />
+            </div>
+            <div className="form-group">
+              <label>Content</label>
+              <textarea
+                className="form-control"
+                value={faqItem.answer}
+                onChange={(value: any) => {
+                  const newFaq = [...faq];
+                  newFaq[index].answer = value;
+                  setFaq(newFaq);
+                }}
+                placeholder="Enter Content"
+                rows={4} // Adjust rows for height as needed
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Image</label>
+              <input
+                type="file"
+                className="form-control"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            </div>
+
+          </div>
+        ))
+      ) : (
+        <p>No Popular Beaches added yet</p>
+      )}
+      <button className="btn btn-secondary buttonSenStyle" onClick={handleAddFaq}>
+        Add Popular Beaches
+      </button>
+
+      <div className="form-group mt-4 addBlogStyle">
+        <button className="btn btn-success " onClick={handleSave}>
+          Save
+        </button>
+        <button className="btn btn-secondary buttonSenStyle" onClick={onClose}>
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default IslandsManagementForm;
